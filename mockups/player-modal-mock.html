@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Player Modal Mock v5</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0f0f1a;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; padding: 20px;
+}
+
+/* ── Modal ── */
+.modal {
+  background: #1a1a2e;
+  border: 1px solid #252540;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 28px 70px rgba(0,0,0,.8);
+  color: #dde;
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a45 transparent;
+}
+
+/* ── Header ── */
+.pm-header {
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 13px 13px 11px;
+  border-bottom: 1px solid #1e1e38;
+  position: sticky; top: 0; background: #1a1a2e; z-index: 10;
+}
+.pm-ovr {
+  min-width: 50px; height: 50px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 800; color: #fff;
+  flex-shrink: 0; letter-spacing: -1px;
+}
+.tier-elite { background: linear-gradient(135deg,#c084fc,#7c3aed); }
+.tier-great { background: linear-gradient(135deg,#60a5fa,#2563eb); }
+.tier-good  { background: linear-gradient(135deg,#34d399,#059669); }
+.tier-avg   { background: linear-gradient(135deg,#fcd34d,#d97706); }
+.tier-below { background: linear-gradient(135deg,#fb923c,#ea580c); }
+.tier-poor  { background: linear-gradient(135deg,#f87171,#dc2626); }
+
+.pm-name-block { flex: 1; min-width: 0; }
+.pm-name {
+  font-size: 16px; font-weight: 700; color: #fff;
+  line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pm-team-row {
+  display: flex; align-items: center; flex-wrap: wrap;
+  margin-top: 4px; font-size: 11px; line-height: 1.4;
+}
+.pm-team-pos  { color: #7ab4ff; font-weight: 700; }
+.pm-team-sep  { color: #2e2e4a; margin: 0 4px; }
+.pm-team-nml  { color: #6ecf6e; }
+.pm-team-nfl  { color: #c9a840; }
+.pm-meta-row {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 3px 0; margin-top: 3px;
+}
+.pm-badge {
+  font-size: 10px; font-weight: 700;
+  padding: 1px 6px; border-radius: 4px; white-space: nowrap;
+}
+.badge-xf   { background:#3d2600; color:#ffb830; border:1px solid #6a4400; }
+.badge-ss   { background:#3a1800; color:#ff8c42; border:1px solid #6a3000; }
+.badge-norm { background:#242438; color:#888; }
+.meta-sep { color:#2e2e4a; font-size:11px; margin: 0 4px; }
+.meta-item { font-size:11px; color:#778; }
+.meta-item b { color:#aab; }
+.pm-close {
+  background:none; border:none; color:#444; cursor:pointer;
+  font-size:17px; padding:4px; flex-shrink:0; line-height:1;
+}
+.pm-close:hover { color:#fff; }
+
+/* ── Body ── */
+.pm-body { padding: 10px 12px 14px; }
+
+/* ── Stat sections: flex-wrap, each col sizes to content ── */
+.stat-wrap {
+  display: flex; flex-wrap: wrap; gap: 7px;
+  align-items: flex-start; margin-bottom: 10px;
+}
+.stat-col {
+  background: #141426; border-radius: 8px;
+  padding: 6px 10px 8px;
+  width: max-content; min-width: 0; flex-shrink: 0;
+}
+.stat-col-title {
+  font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .07em;
+  color: #4a4a68; margin-bottom: 5px;
+  border-bottom: 1px solid #1c1c34; padding-bottom: 4px;
+  white-space: nowrap;
+}
+.stat-row {
+  display: flex; align-items: baseline;
+  gap: 5px; line-height: 1.7; white-space: nowrap;
+}
+.sv {
+  font-size: 13px; font-weight: 700;
+  width: 24px; text-align: right;
+  font-variant-numeric: tabular-nums; flex-shrink: 0;
+}
+.sl { font-size: 11px; color: #4a4a65; }
+
+/* ── Rating color spectrum ── */
+.sv.r-elite { color: #c084fc; }
+.sv.r-great { color: #60a5fa; }
+.sv.r-good  { color: #34d399; }
+.sv.r-avg   { color: #fcd34d; }
+.sv.r-below { color: #fb923c; }
+.sv.r-poor  { color: #f87171; }
+
+/* ── Abilities ── */
+.section-label {
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: #3a3a55; margin: 10px 0 6px;
+}
+/*
+  2-column grid. justify-items:start prevents cards from stretching.
+  width:min-content on the card + white-space:nowrap on the title
+  sets card width = title width; description wraps within it.
+*/
+.abilities-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  justify-items: start;
+  align-items: start;
+  margin-bottom: 10px;
+}
+.ability-card {
+  width: min-content;
+  background: #141426; border-radius: 7px;
+  padding: 7px 9px; border-left: 3px solid #333;
+}
+.ability-card.xf { border-color: #b07800; }
+.ability-card.ss { border-color: #a04820; }
+.ability-name {
+  white-space: nowrap; /* this line drives the card width */
+  font-size: 11px; font-weight: 700; color: #dde;
+  display: flex; align-items: center; gap: 5px;
+  margin-bottom: 3px;
+}
+.ability-type {
+  font-size: 8px; font-weight: 700; flex-shrink: 0;
+  padding: 1px 4px; border-radius: 3px; text-transform: uppercase;
+}
+.ability-type.xf { background:#3d2600; color:#ffb830; }
+.ability-type.ss { background:#3a1800; color:#ff8c42; }
+.ability-desc {
+  /* Fills and wraps within the width set by ability-name */
+  display: block; white-space: normal;
+  font-size: 10px; color: #556; line-height: 1.4;
+}
+
+/* ── Footer: two compact rows ── */
+.pm-footer {
+  border-top: 1px solid #1c1c34;
+  margin-top: 8px; padding-top: 7px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.foot-row {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  font-size: 11px; color: #778; line-height: 1.5;
+}
+.foot-sep { color: #2e2e4a; margin: 0 5px; }
+.foot-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .05em; color: #3d3d5a; margin-right: 3px; }
+.foot-val { color: #aab; }
+.foot-divider { border: none; border-top: 1px solid #1c1c34; margin: 1px 0; }
+
+/* ── Controls ── */
+.controls {
+  position: fixed; top: 12px; right: 12px;
+  display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; max-width: 260px;
+}
+.ctrl-btn {
+  background:#14142a; color:#888; border:1px solid #2a2a45;
+  padding:4px 9px; border-radius:6px; cursor:pointer; font-size:11px;
+}
+.ctrl-btn.active { background:#220e4a; border-color:#7c3aed; color:#c084fc; }
+.note {
+  position:fixed; bottom:10px; left:50%; transform:translateX(-50%);
+  background:#0f0f1a; border:1px solid #2a2a45; color:#444;
+  font-size:10px; padding:5px 14px; border-radius:20px; white-space:nowrap; z-index:99;
+}
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <button class="ctrl-btn" onclick="show('hunter')">WR/CB · Hunter</button>
+  <button class="ctrl-btn" onclick="show('chase')">WR · Chase</button>
+  <button class="ctrl-btn" onclick="show('burrow')">QB · Burrow</button>
+  <button class="ctrl-btn" onclick="show('k')">K · McPherson</button>
+</div>
+
+<div class="modal" id="modal"></div>
+<div class="note">Mock v5 · toggle players top-right</div>
+
+<script>
+/*
+  Full rating sets per section — every abbreviated stat included.
+  Abbreviations match EA Madden ratings site labels.
+
+  General:     SPD ACC STR AGI AWR STM INJ TGH JMP
+  Passing:     THP TUP SHA MDA DPA TOR PAC
+  Ball Carrier: CAR BKT TRK COD BCV STF SPN JUK BKS
+  Receiving:   CAT SPC CIT RSH RMD RDP REL
+  Blocking:    PBK PBP PBF RBK RBP RBF IBL LBK
+  Defense:     PRC PUR TAK HPW BSH PWM FNM BSK MCV ZCV PRS
+  Kicking:     KPW KAC KRT
+*/
+
+const P = {
+  hunter: {
+    name:"Travis Hunter", ovr:92, pos:"WR/CB", nml:"Renegades", nflShort:"Jaguars",
+    num:11, age:21, yrs:1, dev:"X-Factor",
+    dob:"Mar 28, 2004", college:"Colorado", draft:"Rd 1, Pk 2 (2025)",
+    contract:"$36M / 4 yr", aav:"$9M/yr", capHit:"$9.4M", yrsLeft:3,
+    sections:{
+      "General":     [{v:93,l:"SPD"},{v:94,l:"ACC"},{v:74,l:"STR"},{v:92,l:"AGI"},{v:88,l:"AWR"},{v:87,l:"STM"},{v:85,l:"INJ"},{v:80,l:"TGH"},{v:88,l:"JMP"}],
+      "Receiving":   [{v:90,l:"CAT"},{v:87,l:"SPC"},{v:85,l:"CIT"},{v:88,l:"RSH"},{v:84,l:"RMD"},{v:80,l:"RDP"},{v:83,l:"REL"}],
+      "Defense":     [{v:82,l:"PRC"},{v:78,l:"PUR"},{v:76,l:"TAK"},{v:72,l:"HPW"},{v:77,l:"BSH"},{v:25,l:"PWM"},{v:28,l:"FNM"},{v:88,l:"BSK"},{v:91,l:"MCV"},{v:84,l:"ZCV"},{v:86,l:"PRS"}],
+      "Ball Carrier":[{v:70,l:"CAR"},{v:74,l:"BKT"},{v:62,l:"TRK"},{v:88,l:"COD"},{v:80,l:"BCV"},{v:68,l:"STF"},{v:65,l:"SPN"},{v:85,l:"JUK"},{v:58,l:"BKS"}],
+      "Blocking":    [{v:65,l:"PBK"},{v:60,l:"PBP"},{v:62,l:"PBF"},{v:55,l:"RBK"},{v:50,l:"RBP"},{v:52,l:"RBF"},{v:45,l:"IBL"},{v:40,l:"LBK"}],
+      "Passing":     [{v:25,l:"THP"},{v:22,l:"TUP"},{v:20,l:"SHA"},{v:18,l:"MDA"},{v:15,l:"DPA"},{v:20,l:"TOR"},{v:18,l:"PAC"}],
+      "Kicking":     [{v:0,l:"KPW"},{v:0,l:"KAC"},{v:0,l:"KRT"}],
+    },
+    abilities:[
+      {name:"Shutdown",type:"xf",desc:"Elite man coverage — contested catches vs this CB succeed at a much lower rate."},
+      {name:"Mid In Elite",type:"ss",desc:"More consistent catches 10–20 yds inside the numbers."},
+      {name:"Press Coverage",type:"ss",desc:"Higher success on press attempts at the line of scrimmage."},
+      {name:"Route Tech",type:"ss",desc:"Releases off the line more efficiently against press coverage."},
+    ]
+  },
+  chase: {
+    name:"Ja'Marr Chase", ovr:99, pos:"WR", nml:"Warlords", nflShort:"Bengals",
+    num:1, age:26, yrs:4, dev:"X-Factor",
+    dob:"Mar 1, 2000", college:"LSU", draft:"Rd 1, Pk 5 (2021)",
+    contract:"$161M / 4 yr", aav:"$40.3M/yr", capHit:"$28.4M", yrsLeft:3,
+    sections:{
+      "General":     [{v:95,l:"SPD"},{v:94,l:"ACC"},{v:68,l:"STR"},{v:93,l:"AGI"},{v:91,l:"AWR"},{v:87,l:"STM"},{v:88,l:"INJ"},{v:79,l:"TGH"},{v:86,l:"JMP"}],
+      "Receiving":   [{v:99,l:"CAT"},{v:98,l:"SPC"},{v:97,l:"CIT"},{v:96,l:"RSH"},{v:94,l:"RMD"},{v:91,l:"RDP"},{v:88,l:"REL"}],
+      "Ball Carrier":[{v:72,l:"CAR"},{v:78,l:"BKT"},{v:65,l:"TRK"},{v:89,l:"COD"},{v:82,l:"BCV"},{v:73,l:"STF"},{v:69,l:"SPN"},{v:88,l:"JUK"},{v:60,l:"BKS"}],
+      "Defense":     [{v:50,l:"PRC"},{v:42,l:"PUR"},{v:38,l:"TAK"},{v:40,l:"HPW"},{v:45,l:"BSH"},{v:20,l:"PWM"},{v:22,l:"FNM"},{v:58,l:"BSK"},{v:44,l:"MCV"},{v:42,l:"ZCV"},{v:35,l:"PRS"}],
+      "Blocking":    [{v:55,l:"PBK"},{v:50,l:"PBP"},{v:52,l:"PBF"},{v:45,l:"RBK"},{v:42,l:"RBP"},{v:44,l:"RBF"},{v:38,l:"IBL"},{v:35,l:"LBK"}],
+      "Passing":     [{v:20,l:"THP"},{v:18,l:"TUP"},{v:15,l:"SHA"},{v:14,l:"MDA"},{v:12,l:"DPA"},{v:18,l:"TOR"},{v:15,l:"PAC"}],
+      "Kicking":     [{v:0,l:"KPW"},{v:0,l:"KAC"},{v:0,l:"KRT"}],
+    },
+    abilities:[
+      {name:"Double Me",type:"xf",desc:"Aggressive catches vs single coverage succeed more often in zone."},
+      {name:"Mid In Elite",type:"ss",desc:"More consistent catches 10–20 yds inside the numbers."},
+      {name:"Runoff Elite",type:"ss",desc:"Distracts defenders for longer during route runoffs."},
+      {name:"Mid Out Elite",type:"ss",desc:"More consistent catches 10–20 yds outside the numbers."},
+      {name:"Acrobat",type:"ss",desc:"More likely to succeed at diving catches and swats."},
+    ]
+  },
+  burrow: {
+    name:"Joe Burrow", ovr:97, pos:"QB", nml:"Warlords", nflShort:"Bengals",
+    num:9, age:29, yrs:5, dev:"X-Factor",
+    dob:"Dec 10, 1996", college:"LSU", draft:"Rd 1, Pk 1 (2020)",
+    contract:"$275M / 5 yr", aav:"$55M/yr", capHit:"$55M", yrsLeft:2,
+    sections:{
+      "General":     [{v:82,l:"SPD"},{v:85,l:"ACC"},{v:75,l:"STR"},{v:84,l:"AGI"},{v:97,l:"AWR"},{v:90,l:"STM"},{v:88,l:"INJ"},{v:82,l:"TGH"},{v:76,l:"JMP"}],
+      "Passing":     [{v:98,l:"THP"},{v:97,l:"TUP"},{v:95,l:"SHA"},{v:96,l:"MDA"},{v:93,l:"DPA"},{v:90,l:"TOR"},{v:88,l:"PAC"}],
+      "Ball Carrier":[{v:68,l:"CAR"},{v:58,l:"BKT"},{v:55,l:"TRK"},{v:75,l:"COD"},{v:72,l:"BCV"},{v:52,l:"STF"},{v:50,l:"SPN"},{v:65,l:"JUK"},{v:88,l:"BKS"}],
+      "Defense":     [{v:60,l:"PRC"},{v:42,l:"PUR"},{v:45,l:"TAK"},{v:38,l:"HPW"},{v:30,l:"BSH"},{v:20,l:"PWM"},{v:18,l:"FNM"},{v:75,l:"BSK"},{v:28,l:"MCV"},{v:25,l:"ZCV"},{v:20,l:"PRS"}],
+      "Receiving":   [{v:55,l:"CAT"},{v:42,l:"SPC"},{v:48,l:"CIT"},{v:35,l:"RSH"},{v:30,l:"RMD"},{v:28,l:"RDP"},{v:40,l:"REL"}],
+      "Blocking":    [{v:42,l:"PBK"},{v:38,l:"PBP"},{v:36,l:"PBF"},{v:35,l:"RBK"},{v:32,l:"RBP"},{v:30,l:"RBF"},{v:28,l:"IBL"},{v:25,l:"LBK"}],
+      "Kicking":     [{v:0,l:"KPW"},{v:0,l:"KAC"},{v:0,l:"KRT"}],
+    },
+    abilities:[
+      {name:"Gunslinger",type:"xf",desc:"Throw bullet passes outside the pocket with extra accuracy."},
+      {name:"Short Out Elite",type:"ss",desc:"More consistent short out route completions."},
+      {name:"Clutch",type:"ss",desc:"Increased performance in clutch situations late in games."},
+    ]
+  },
+  k: {
+    name:"Evan McPherson", ovr:91, pos:"K", nml:"Warlords", nflShort:"Bengals",
+    num:2, age:26, yrs:4, dev:"Superstar",
+    dob:"Jul 21, 1999", college:"Florida", draft:"Rd 5, Pk 149 (2021)",
+    contract:"$17.5M / 3 yr", aav:"$5.8M/yr", capHit:"$4.2M", yrsLeft:2,
+    sections:{
+      "General":     [{v:68,l:"SPD"},{v:70,l:"ACC"},{v:68,l:"STR"},{v:70,l:"AGI"},{v:86,l:"AWR"},{v:88,l:"STM"},{v:90,l:"INJ"},{v:80,l:"TGH"},{v:68,l:"JMP"}],
+      "Kicking":     [{v:96,l:"KPW"},{v:93,l:"KAC"},{v:55,l:"KRT"}],
+      "Ball Carrier":[{v:30,l:"CAR"},{v:25,l:"BKT"},{v:20,l:"TRK"},{v:35,l:"COD"},{v:28,l:"BCV"},{v:18,l:"STF"},{v:15,l:"SPN"},{v:22,l:"JUK"},{v:30,l:"BKS"}],
+      "Defense":     [{v:50,l:"PRC"},{v:28,l:"PUR"},{v:30,l:"TAK"},{v:25,l:"HPW"},{v:20,l:"BSH"},{v:15,l:"PWM"},{v:15,l:"FNM"},{v:30,l:"BSK"},{v:20,l:"MCV"},{v:20,l:"ZCV"},{v:15,l:"PRS"}],
+      "Receiving":   [{v:28,l:"CAT"},{v:20,l:"SPC"},{v:22,l:"CIT"},{v:15,l:"RSH"},{v:12,l:"RMD"},{v:10,l:"RDP"},{v:20,l:"REL"}],
+      "Blocking":    [{v:25,l:"PBK"},{v:22,l:"PBP"},{v:20,l:"PBF"},{v:20,l:"RBK"},{v:18,l:"RBP"},{v:18,l:"RBF"},{v:15,l:"IBL"},{v:15,l:"LBK"}],
+      "Passing":     [{v:20,l:"THP"},{v:18,l:"TUP"},{v:15,l:"SHA"},{v:12,l:"MDA"},{v:10,l:"DPA"},{v:15,l:"TOR"},{v:12,l:"PAC"}],
+    },
+    abilities:[
+      {name:"Clutch Kicker",type:"ss",desc:"Increased kick accuracy in high-pressure late-game situations."},
+    ]
+  }
+};
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function rClass(v) {
+  if (v >= 95) return 'r-elite';
+  if (v >= 88) return 'r-great';
+  if (v >= 80) return 'r-good';
+  if (v >= 72) return 'r-avg';
+  if (v >= 65) return 'r-below';
+  return 'r-poor';
+}
+function ovrTier(v) {
+  if (v >= 95) return 'tier-elite';
+  if (v >= 88) return 'tier-great';
+  if (v >= 80) return 'tier-good';
+  if (v >= 72) return 'tier-avg';
+  if (v >= 65) return 'tier-below';
+  return 'tier-poor';
+}
+function sectionMax(rows) { return Math.max(...rows.map(r => r.v), 0); }
+function sectionAvg(rows) {
+  // avg excludes 0s so sections with some 0s still sort correctly
+  const v = rows.filter(r => r.v > 0);
+  return v.length ? v.reduce((s,r) => s+r.v, 0)/v.length : 0;
+}
+function devBadge(dev) {
+  if (dev === 'X-Factor') return `<span class="pm-badge badge-xf">⚡ X-Factor</span>`;
+  if (dev === 'Superstar') return `<span class="pm-badge badge-ss">★ Superstar</span>`;
+  if (dev) return `<span class="pm-badge badge-norm">${dev}</span>`;
+  return '';
+}
+
+// ── Build one stat column ─────────────────────────────────────────────────────
+// Show section if max >= 40. Show EVERY row, no per-row filtering.
+function buildCol(title, rows) {
+  if (sectionMax(rows) < 40) return null;
+  const rowsHtml = rows
+    .map(r => `<div class="stat-row"><span class="sv ${rClass(r.v)}">${r.v}</span><span class="sl">${r.l}</span></div>`)
+    .join('');
+  return {
+    title,
+    html: `<div class="stat-col"><div class="stat-col-title">${title}</div>${rowsHtml}</div>`,
+    avg: sectionAvg(rows),
+    max: sectionMax(rows)
+  };
+}
+
+// ── Full render ───────────────────────────────────────────────────────────────
+function render(p) {
+  const allCols = Object.entries(p.sections)
+    .map(([t,rows]) => buildCol(t, rows))
+    .filter(Boolean);
+
+  const gen  = allCols.find(c => c.title === 'General');
+  const rest = allCols.filter(c => c.title !== 'General').sort((a,b) => b.avg - a.avg);
+  const colsHtml = [gen, ...rest].filter(Boolean).map(c => c.html).join('');
+
+  const abHtml = p.abilities.map(a => `
+    <div class="ability-card ${a.type}">
+      <div class="ability-name">
+        ${a.name}<span class="ability-type ${a.type}">${a.type==='xf'?'X-Factor':'Superstar'}</span>
+      </div>
+      <div class="ability-desc">${a.desc}</div>
+    </div>`).join('');
+
+  return `
+  <div class="pm-header">
+    <div class="pm-ovr ${ovrTier(p.ovr)}">${p.ovr}</div>
+    <div class="pm-name-block">
+      <div class="pm-name">${p.name}</div>
+      <div class="pm-team-row">
+        <span class="pm-team-pos">${p.pos}</span>
+        <span class="pm-team-sep">,</span>
+        <span class="pm-team-nml">NML-${p.nml}</span>
+        <span class="pm-team-sep">,</span>
+        <span class="pm-team-nfl">NFL-${p.nflShort}</span>
+      </div>
+      <div class="pm-meta-row">
+        <span class="meta-item"><b>${p.age}</b> yrs old</span>
+        <span class="meta-sep">·</span>
+        <span class="meta-item"><b>${p.yrs}</b> yrs pro</span>
+        <span class="meta-sep">·</span>
+        <span class="meta-item">#<b>${p.num}</b></span>
+        <span class="meta-sep">·</span>
+        ${devBadge(p.dev)}
+      </div>
+    </div>
+    <button class="pm-close">✕</button>
+  </div>
+  <div class="pm-body">
+    <div class="stat-wrap">${colsHtml}</div>
+    ${p.abilities.length ? `<div class="section-label">Abilities</div><div class="abilities-wrap">${abHtml}</div>` : ''}
+    <div class="pm-footer">
+      <div class="foot-row">
+        <span class="foot-lbl">College</span><span class="foot-val">${p.college}</span>
+        <span class="foot-sep">·</span>
+        <span class="foot-lbl">Draft</span><span class="foot-val">${p.draft}</span>
+        <span class="foot-sep">·</span>
+        <span class="foot-lbl">DOB</span><span class="foot-val">${p.dob}</span>
+      </div>
+      <hr class="foot-divider">
+      <div class="foot-row">
+        <span class="foot-lbl">Contract</span><span class="foot-val">${p.contract}</span>
+        <span class="foot-sep">·</span>
+        <span class="foot-lbl">AAV</span><span class="foot-val">${p.aav}</span>
+        <span class="foot-sep">·</span>
+        <span class="foot-lbl">Cap Hit</span><span class="foot-val">${p.capHit}</span>
+        <span class="foot-sep">·</span>
+        <span class="foot-lbl">Yrs Left</span><span class="foot-val">${p.yrsLeft}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function show(key) {
+  document.getElementById('modal').innerHTML = render(P[key]);
+  document.querySelectorAll('.ctrl-btn').forEach(b =>
+    b.classList.toggle('active', b.onclick.toString().includes(`'${key}'`))
+  );
+}
+show('hunter');
+</script>
+</body>
+</html>

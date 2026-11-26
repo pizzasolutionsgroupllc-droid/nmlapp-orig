@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NML Dashboard Mockup</title>
+<style>
+  :root {
+    --bg: #0f1117; --surface: #181c26; --surface2: #1e2330; --surface3: #252a38;
+    --border: rgba(255,255,255,.08); --text1: #e8eaf0; --text2: #9ba3b8; --text3: #5c6480;
+    --accent: #00d4ff; --success: #00cc88; --danger: #ff4444; --warning: #ffaa00;
+    --gold: #ffd700; --radius: 8px; --radius-lg: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text1); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; min-height: 100vh; }
+
+  .layout { display: flex; min-height: 100vh; }
+  .sidebar { width: 200px; background: var(--surface); border-right: 1px solid var(--border); padding: 16px 0; flex-shrink: 0; }
+  .sb-logo { padding: 8px 16px 20px; font-weight: 800; font-size: 18px; letter-spacing: 1px; color: var(--accent); }
+  .sb-item { padding: 9px 16px; font-size: 13px; color: var(--text2); cursor: pointer; border-left: 3px solid transparent; }
+  .sb-item.active { color: var(--text1); background: rgba(0,212,255,.07); border-left-color: var(--accent); }
+
+  .main { flex: 1; display: flex; flex-direction: column; }
+  .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; height: 48px; display: flex; align-items: center; justify-content: space-between; }
+  .topbar-title { font-weight: 700; font-size: 15px; }
+  .content { padding: 24px; max-width: 1100px; }
+
+  /* Cards */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 16px; }
+  .card-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .card-title { font-weight: 700; font-size: 14px; }
+  .card-body { padding: 14px 16px; }
+
+  /* Stat chips row */
+  .stat-chips { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .chip { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 10px 18px; display: flex; flex-direction: column; gap: 2px; }
+  .chip-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); }
+  .chip-value { font-size: 22px; font-weight: 800; font-family: 'Barlow Condensed', 'Segoe UI', sans-serif; color: var(--accent); }
+  .chip-value.green { color: var(--success); }
+  .chip-value.gold { color: var(--gold); }
+  .chip-sub { font-size: 10px; color: var(--text3); margin-top: 1px; }
+
+  /* Grid */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* Pending trades — compact */
+  .trade-item { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .trade-item:last-child { margin-bottom: 0; }
+  .trade-teams { font-weight: 600; font-size: 13px; }
+  .trade-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .ts { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; letter-spacing: .5px; white-space: nowrap; }
+  .ts-pending { background: rgba(255,170,0,.15); color: var(--warning); }
+  .btn { background: var(--surface3); border: 1px solid var(--border); border-radius: 6px; color: var(--text1); padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer; }
+
+  /* My Stats — compact */
+  .my-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .ms-header { font-size: 9px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; padding: 6px 12px; background: var(--surface2); color: var(--text3); border-bottom: 1px solid var(--border); }
+  .ms-header.accent { color: var(--accent); }
+  .ms-row { display: contents; }
+  .ms-cell { padding: 7px 12px; font-size: 12px; color: var(--text2); border-top: 1px solid var(--border); }
+  .ms-val { padding: 7px 12px; font-size: 17px; font-weight: 800; color: var(--accent); border-top: 1px solid var(--border); border-left: 1px solid var(--border); font-family: 'Barlow Condensed', 'Segoe UI', sans-serif; }
+  .ms-val.dim { color: var(--text1); }
+
+  /* 4-col stat variant for My Stats */
+  .ms4 { display: grid; grid-template-columns: auto 1fr 1fr 1fr; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .ms4-lbl { padding: 8px 12px; font-size: 12px; color: var(--text2); border-top: 1px solid var(--border); background: var(--surface2); }
+  .ms4-lbl:first-child { border-top: none; }
+  .ms4-hdr { padding: 7px 10px; font-size: 9px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); text-align: center; border-left: 1px solid var(--border); background: var(--surface2); }
+  .ms4-hdr.accent { color: var(--accent); }
+  .ms4-val { padding: 8px 10px; font-size: 17px; font-weight: 800; text-align: center; border-left: 1px solid var(--border); border-top: 1px solid var(--border); font-family: 'Barlow Condensed', 'Segoe UI', sans-serif; color: var(--accent); }
+  .ms4-val.dim { color: var(--text1); }
+
+  /* Leaderboard — compact ranked list */
+  .lb-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-rank { font-size: 13px; font-weight: 800; color: var(--text3); width: 20px; flex-shrink: 0; text-align: center; }
+  .lb-rank.gold { color: var(--gold); }
+  .lb-rank.silver { color: #aab; }
+  .lb-rank.bronze { color: #c87941; }
+  .lb-name { font-size: 13px; font-weight: 600; flex: 1; }
+  .lb-team { font-size: 11px; color: var(--text3); }
+  .lb-cols { display: flex; gap: 4px; }
+  .lb-col { display: flex; flex-direction: column; align-items: center; min-width: 44px; }
+  .lb-col-hdr { font-size: 9px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--text3); margin-bottom: 2px; }
+  .lb-col-hdr.accent { color: var(--accent); }
+  .lb-col-val { font-size: 14px; font-weight: 800; font-family: 'Barlow Condensed', 'Segoe UI', sans-serif; color: var(--text1); }
+  .lb-col-val.accent { color: var(--accent); }
+  .lb-divider { width: 1px; background: var(--border); margin: 0 4px; }
+
+  /* Txn log — compact bottom strip */
+  .txr { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: 12px; }
+  .txr:last-child { border-bottom: none; }
+  .txb { font-size: 9px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; white-space: nowrap; margin-top: 1px; }
+  .txb-trade { background: rgba(0,212,255,.15); color: var(--accent); }
+  .txb-sign { background: rgba(0,204,136,.15); color: var(--success); }
+  .txb-cut { background: rgba(255,68,68,.15); color: var(--danger); }
+  .tx-time { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+  /* Empty state */
+  .empty { color: var(--text3); font-size: 13px; padding: 8px 0; font-style: italic; }
+
+  /* Label */
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; }
+
+  /* Annotations */
+  .annotation { position: relative; }
+  .tag { position: absolute; right: -8px; top: -8px; background: var(--accent); color: #000; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 20px; letter-spacing: .5px; z-index: 10; }
+  .tag.red { background: var(--danger); color: #fff; }
+  .tag.green { background: var(--success); color: #000; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sb-logo">NML</div>
+    <div class="sb-item active">🏠 Dashboard</div>
+    <div class="sb-item">🏈 Teams</div>
+    <div class="sb-item">🔄 Trade Center</div>
+    <div class="sb-item">📋 Transaction Log</div>
+    <div class="sb-item">💡 Ideas</div>
+    <div class="sb-item">⚙️ Settings</div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title">Dashboard</div>
+      <div style="font-size:12px;color:var(--text3)">Logged in as Jon · Packers</div>
+    </div>
+
+    <div class="content">
+
+      <!-- ① Stat chips — only meaningful league counts -->
+      <div style="margin-bottom:6px;font-size:11px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase">① Stat chips — league-wide trades only, no filler</div>
+      <div class="stat-chips" style="margin-bottom:24px">
+        <div class="chip annotation">
+          <div class="chip-label">Trades This Year</div>
+          <div class="chip-value green">24</div>
+          <div class="chip-sub">League-wide · 2026</div>
+          <div class="tag green">KEPT</div>
+        </div>
+        <div class="chip annotation">
+          <div class="chip-label">Trades All Time</div>
+          <div class="chip-value">187</div>
+          <div class="chip-sub">Since league started</div>
+          <div class="tag green">NEW</div>
+        </div>
+        <!-- Rostered Players & Pending Count removed -->
+        <div class="chip annotation" style="opacity:.35;border-style:dashed">
+          <div class="chip-label" style="text-decoration:line-through">Rostered Players</div>
+          <div class="chip-value" style="color:var(--text3)">1,420</div>
+          <div class="tag red">REMOVED</div>
+        </div>
+        <div class="chip annotation" style="opacity:.35;border-style:dashed">
+          <div class="chip-label" style="text-decoration:line-through">Pending Trades</div>
+          <div class="chip-value" style="color:var(--text3)">3</div>
+          <div class="tag red">REMOVED</div>
+        </div>
+      </div>
+
+      <!-- ② My Pending Trades — compact, logged-in user only -->
+      <div style="margin-bottom:6px;font-size:11px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase">② My Pending Trades — your trades only, compact</div>
+      <div class="card annotation" style="margin-bottom:24px">
+        <div class="tag green">COMPACT</div>
+        <div class="card-header">
+          <div class="card-title">📬 My Pending Trades</div>
+          <button class="btn">All Trades →</button>
+        </div>
+        <div class="card-body" style="padding:12px 16px">
+          <div class="trade-item">
+            <div>
+              <div class="trade-teams">Packers ↔ Bears</div>
+              <div class="trade-meta">You proposed · 2 hours ago</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="ts ts-pending">Awaiting Response</span>
+              <button class="btn">View</button>
+            </div>
+          </div>
+          <div class="trade-item">
+            <div>
+              <div class="trade-teams">Cowboys ↔ Packers</div>
+              <div class="trade-meta">Cowboys proposed · Yesterday</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="ts ts-pending">Needs Your Reply</span>
+              <button class="btn">View</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ My Stats — compact 4-col inline table -->
+      <div style="margin-bottom:6px;font-size:11px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase">③ My Stats — compact, no wasted width</div>
+      <div class="card annotation" style="margin-bottom:24px;max-width:480px">
+        <div class="tag green">COMPACT</div>
+        <div class="card-header">
+          <div class="card-title">⭐ My Stats</div>
+          <span style="font-size:11px;color:var(--text3)">Jon · Packers</span>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="ms4">
+            <div></div>
+            <div class="ms4-hdr accent">2026</div>
+            <div class="ms4-hdr">All Time</div>
+            <div class="ms4-hdr">Avg/Yr</div>
+            <div class="ms4-lbl">Trades</div>
+            <div class="ms4-val accent">8</div>
+            <div class="ms4-val dim">52</div>
+            <div class="ms4-val dim">17.3</div>
+            <div class="ms4-lbl">Proposals</div>
+            <div class="ms4-val accent">14</div>
+            <div class="ms4-val dim">91</div>
+            <div class="ms4-val dim">30.3</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ④ Leaderboard — compact ranked list -->
+      <div style="margin-bottom:6px;font-size:11px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase">④ Activity Leaderboard — ranked list, no wasted space</div>
+      <div class="card annotation" style="margin-bottom:24px;max-width:560px">
+        <div class="tag green">COMPACT</div>
+        <div class="card-header">
+          <div class="card-title">🏆 Activity Leaderboard</div>
+          <span style="font-size:11px;color:var(--text3)">Top 10 · Trades + Signings + Proposals</span>
+        </div>
+        <div class="card-body">
+          <!-- Header row -->
+          <div style="display:flex;align-items:center;gap:10px;padding:0 0 6px;border-bottom:1px solid var(--border);margin-bottom:2px">
+            <div style="width:20px"></div>
+            <div style="flex:1"></div>
+            <div class="lb-cols">
+              <div class="lb-col"><div class="lb-col-hdr accent">2026</div><div class="lb-col-hdr">ALL</div></div>
+              <div class="lb-divider"></div>
+              <div class="lb-col"><div class="lb-col-hdr accent">2026</div><div class="lb-col-hdr">ALL</div></div>
+              <div class="lb-divider"></div>
+              <div class="lb-col"><div class="lb-col-hdr accent">2026</div><div class="lb-col-hdr">ALL</div></div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:0 0 8px;border-bottom:2px solid var(--border);margin-bottom:4px">
+            <div style="width:20px"></div>
+            <div style="flex:1;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text3)">Owner · Team</div>
+            <div class="lb-cols">
+              <div class="lb-col"><div style="font-size:9px;font-weight:700;color:var(--accent);letter-spacing:.5px">TRADES</div></div>
+              <div class="lb-divider"></div>
+              <div class="lb-col"><div style="font-size:9px;font-weight:700;color:var(--accent);letter-spacing:.5px">SIGNINGS</div></div>
+              <div class="lb-divider"></div>
+              <div class="lb-col"><div style="font-size:9px;font-weight:700;color:var(--accent);letter-spacing:.5px">PROPS</div></div>
+            </div>
+          </div>
+          ${[
+            ['Jon','Packers','8','52','11','63','14','91','gold'],
+            ['Mike','Cowboys','6','44','9','55','11','77','silver'],
+            ['Dave','Raiders','5','39','8','48','9','62','bronze'],
+            ['Chris','Chiefs','4','35','7','42','8','55',''],
+            ['Pat','Eagles','3','28','6','38','5','44',''],
+          ].map(([name,team,ty,ta,sy,sa,py,pa,rank],i)=>`
+          <div class="lb-row">
+            <div class="lb-rank ${rank}">${i+1}</div>
+            <div style="flex:1"><div class="lb-name">${name}</div><div class="lb-team">${team}</div></div>
+            <div class="lb-cols">
+              <div class="lb-col">
+                <div class="lb-col-val accent">${ty}</div>
+                <div class="lb-col-val" style="font-size:11px;color:var(--text3)">${ta}</div>
+              </div>
+              <div class="lb-divider"></div>
+              <div class="lb-col">
+                <div class="lb-col-val accent">${sy}</div>
+                <div class="lb-col-val" style="font-size:11px;color:var(--text3)">${sa}</div>
+              </div>
+              <div class="lb-divider"></div>
+              <div class="lb-col">
+                <div class="lb-col-val accent">${py}</div>
+                <div class="lb-col-val" style="font-size:11px;color:var(--text3)">${pa}</div>
+              </div>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- ⑤ Recent Transactions — moved to bottom -->
+      <div style="margin-bottom:6px;font-size:11px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase">⑤ Recent Transactions — moved to bottom, league-wide pulse</div>
+      <div class="card annotation" style="max-width:560px">
+        <div class="tag green">MOVED ↓</div>
+        <div class="card-header">
+          <div class="card-title">📋 Recent Transactions</div>
+          <button class="btn">View All →</button>
+        </div>
+        <div class="card-body" style="padding:8px 16px">
+          <div class="txr"><span class="txb txb-trade">trade</span><div><div>Packers ↔ Bears trade</div><div class="tx-time">2h ago · Jon</div></div></div>
+          <div class="txr"><span class="txb txb-sign">signing</span><div><div>Cowboys signed WR Tyreek Hill</div><div class="tx-time">4h ago · Mike</div></div></div>
+          <div class="txr"><span class="txb txb-cut">cut</span><div><div>Raiders cut QB Derek Carr</div><div class="tx-time">Yesterday · Dave</div></div></div>
+          <div class="txr"><span class="txb txb-trade">trade</span><div><div>Chiefs ↔ Eagles trade</div><div class="tx-time">Yesterday · Chris</div></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+  // Render leaderboard rows (template literal workaround)
+  document.querySelectorAll('.lb-cols')[0];
+</script>
+</body>
+</html>

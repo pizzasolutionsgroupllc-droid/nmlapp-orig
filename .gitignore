@@ -1,0 +1,14 @@
+*.db
+*.db-shm
+*.db-wal
+__pycache__/
+*.pyc
+.env
+*.log
+.fuse_hidden*
+.DS_Store
+*.xlsx
+*.csv
+SESSION-*.md
+session_summary*.md
+.DS_Store

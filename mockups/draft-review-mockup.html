@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NML Draft Review — UI Mockup</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #111;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+  color: #e5e7eb;
+}
+
+/* ── META CHROME ── */
+.meta-chrome {
+  position: sticky; top: 0; z-index: 1000;
+  background: #0a0a12;
+  border-bottom: 2px solid #4f8ef7;
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.meta-label { color: #4f8ef7; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+.meta-sep { color: #333; }
+.meta-hint { color: #777; font-size: 12px; }
+
+/* ── APP FRAME ── */
+.viewport-wrap { padding: 20px; display: flex; justify-content: center; }
+.app-frame { background: #0f0f1a; border-radius: 10px; overflow: hidden; width: 100%; max-width: 1100px; padding: 24px; }
+
+/* ── PAGE HEADER ── */
+.page-header { margin-bottom: 20px; }
+.page-title { font-size: 24px; font-weight: 700; color: #fff; }
+.page-sub { font-size: 13px; color: #888; margin-top: 4px; }
+
+/* ── REVIEW TABS (AI vs user-published) ── */
+.review-tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid #2a2d3e; flex-wrap: wrap; }
+.review-tab {
+  padding: 10px 16px; cursor: pointer; font-size: 13px; color: #888;
+  border-bottom: 2px solid transparent; display: flex; align-items: center; gap: 8px;
+}
+.review-tab:hover { color: #fff; }
+.review-tab.active { color: #4f8ef7; border-bottom-color: #4f8ef7; font-weight: 600; }
+.review-tab .badge {
+  background: #4f8ef7; color: #fff; font-size: 9px; font-weight: 700;
+  padding: 2px 6px; border-radius: 8px; letter-spacing: .5px;
+}
+.review-tab.publish { color: #84cc16; margin-left: auto; }
+.review-tab.publish:hover { color: #a3e635; }
+
+/* ── LEAGUE-WIDE RANKING CARD (vertical) ── */
+.rank-card {
+  background: #1a1a2a; border: 1px solid #2a2d3e; border-radius: 10px;
+  padding: 18px 20px; margin-bottom: 24px;
+}
+.rank-card-title {
+  font-size: 12px; color: #4f8ef7; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px;
+}
+.rank-list {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 16px;
+}
+@media (max-width: 720px) { .rank-list { grid-template-columns: 1fr; } }
+.rank-row {
+  display: grid; grid-template-columns: 32px 1fr 56px 36px;
+  align-items: center; gap: 10px;
+  padding: 7px 10px; border-radius: 6px;
+  border-bottom: 1px solid #1f2030; cursor: pointer;
+}
+.rank-row:hover { background: #15172a; }
+.rank-row .rk-num { color: #888; font-weight: 800; font-size: 13px; text-align: right; }
+.rank-row .rk-team { color: #e5e7eb; font-weight: 600; font-size: 13px; }
+.rank-row .rk-team-sub { color: #777; font-size: 11px; font-weight: 400; margin-left: 4px; }
+.rank-row .rk-move { font-size: 11px; color: #555; text-align: center; }
+.rank-row .rk-score {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px;
+}
+
+/* ── HEAT MAP COLORS (1-5) ── */
+.g5 { background: #16a34a; color: #fff; }
+.g4 { background: #84cc16; color: #0a0a12; }
+.g3 { background: #facc15; color: #0a0a12; }
+.g2 { background: #f97316; color: #fff; }
+.g1 { background: #dc2626; color: #fff; }
+.dot-g5 { background: #16a34a; }
+.dot-g4 { background: #84cc16; }
+.dot-g3 { background: #facc15; }
+.dot-g2 { background: #f97316; }
+.dot-g1 { background: #dc2626; }
+
+/* ── TEAM GRADE CARD ── */
+.team-card {
+  background: #16162a; border: 1px solid #2a2d3e; border-radius: 10px;
+  margin-bottom: 16px; overflow: hidden;
+}
+.team-card-header {
+  padding: 16px 20px; display: flex; align-items: center; gap: 14px;
+  border-bottom: 1px solid #2a2d3e;
+}
+.team-logo {
+  width: 48px; height: 48px; border-radius: 8px;
+  background: linear-gradient(135deg, #4f8ef7, #7c6aff);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 18px; flex-shrink: 0;
+}
+.team-info { flex: 1; min-width: 0; }
+.team-name { font-size: 18px; font-weight: 700; color: #fff; }
+.team-meta { font-size: 12px; color: #888; margin-top: 2px; }
+.team-rank {
+  background: #15172a; border: 1px solid #2a2d3e; border-radius: 6px;
+  padding: 4px 10px; font-size: 12px; color: #888; margin-right: 12px;
+}
+.team-rank b { color: #fff; font-size: 14px; }
+.final-score {
+  width: 56px; height: 56px; border-radius: 12px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-weight: 800; flex-shrink: 0;
+}
+.final-score .num { font-size: 26px; line-height: 1; }
+.final-score .lbl { font-size: 9px; letter-spacing: 1px; opacity: .8; margin-top: 2px; }
+
+/* ── BLURB ── */
+.blurb {
+  padding: 14px 20px; background: #1a1a2e; font-style: italic;
+  color: #cbd5e1; font-size: 14px; line-height: 1.5;
+  border-bottom: 1px solid #2a2d3e;
+}
+.blurb::before { content: '"'; color: #4f8ef7; font-size: 22px; font-style: normal; margin-right: 4px; }
+.blurb::after { content: '"'; color: #4f8ef7; font-size: 22px; font-style: normal; margin-left: 2px; }
+
+/* ── SUB-GRADES ── */
+.subgrades {
+  padding: 14px 20px; display: flex; gap: 10px; flex-wrap: wrap;
+  border-bottom: 1px solid #2a2d3e;
+}
+.subgrade-pill {
+  display: flex; align-items: center; gap: 8px;
+  background: #15172a; border: 1px solid #2a2d3e; border-radius: 8px;
+  padding: 8px 12px; flex: 1; min-width: 140px;
+}
+.subgrade-pill .lbl { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; flex: 1; }
+.subgrade-pill .val {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 14px;
+}
+
+/* ── BEST/WORST CALLOUTS ── */
+.callouts {
+  padding: 14px 20px; display: flex; gap: 12px; flex-wrap: wrap;
+  border-bottom: 1px solid #2a2d3e;
+}
+.callout {
+  flex: 1; min-width: 240px; padding: 10px 12px; border-radius: 8px;
+  background: #15172a; border-left: 3px solid;
+}
+.callout.best { border-color: #16a34a; }
+.callout.worst { border-color: #dc2626; }
+.callout-lbl {
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; margin-bottom: 4px;
+}
+.callout.best .callout-lbl { color: #16a34a; }
+.callout.worst .callout-lbl { color: #dc2626; }
+.callout-text { font-size: 13px; color: #e5e7eb; line-height: 1.4; }
+.callout-text b { color: #fff; }
+
+/* ── PICKS SECTION (collapsable) ── */
+.picks-section { border-bottom: 1px solid #2a2d3e; }
+.picks-toggle {
+  width: 100%; padding: 12px 20px; background: none; border: none;
+  color: #cbd5e1; font-size: 13px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; gap: 8px; text-align: left;
+  font-family: inherit;
+}
+.picks-toggle:hover { background: #1a1a2e; }
+.picks-toggle .arrow { transition: transform 0.2s; color: #888; }
+.picks-toggle.collapsed .arrow { transform: rotate(-90deg); }
+.picks-table-wrap { padding: 0 20px 16px; overflow-x: auto; }
+.picks-section.collapsed .picks-table-wrap { display: none; }
+.picks-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 700px; }
+.picks-table th {
+  text-align: left; padding: 8px 10px; color: #888; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px; font-size: 10px;
+  border-bottom: 1px solid #2a2d3e;
+}
+.picks-table td { padding: 10px; border-bottom: 1px solid #1f2030; vertical-align: middle; }
+.picks-table tr:last-child td { border-bottom: none; }
+.pick-num { color: #888; font-weight: 700; white-space: nowrap; }
+.pick-player { color: #fff; font-weight: 600; white-space: nowrap; }
+.pick-pos {
+  display: inline-block; padding: 2px 6px; border-radius: 4px;
+  background: #2a2d3e; color: #cbd5e1; font-size: 10px; font-weight: 700;
+}
+.ref-num { color: #cbd5e1; font-weight: 600; text-align: center; }
+.ref-num.dim { color: #555; }
+.value-chip {
+  display: inline-block; padding: 3px 8px; border-radius: 12px;
+  font-size: 11px; font-weight: 700; white-space: nowrap;
+}
+.value-chip.steal { background: rgba(22, 163, 74, .18); color: #4ade80; border: 1px solid rgba(22, 163, 74, .4); }
+.value-chip.even { background: rgba(250, 204, 21, .15); color: #facc15; border: 1px solid rgba(250, 204, 21, .35); }
+.value-chip.reach { background: rgba(220, 38, 38, .18); color: #f87171; border: 1px solid rgba(220, 38, 38, .4); }
+.pick-grade {
+  width: 26px; height: 26px; border-radius: 6px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px;
+}
+
+/* ── LOOKING AHEAD ── */
+.ahead-section { padding: 16px 20px; }
+.ahead-title {
+  font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: #4f8ef7; margin-bottom: 10px;
+}
+.ahead-needs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.need-pill {
+  background: rgba(220, 38, 38, .12); color: #fca5a5;
+  border: 1px solid rgba(220, 38, 38, .3); border-radius: 12px;
+  padding: 4px 10px; font-size: 12px; font-weight: 600;
+}
+.ahead-tools { font-size: 13px; color: #cbd5e1; line-height: 1.5; }
+.ahead-tools b { color: #fff; }
+
+/* ── SECTION DIVIDER ── */
+.section-divider {
+  font-size: 11px; color: #555; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  margin: 28px 0 12px; padding-bottom: 8px;
+  border-bottom: 1px solid #2a2d3e;
+}
+</style>
+</head>
+<body>
+
+<div class="meta-chrome">
+  <span class="meta-label">Mockup</span>
+  <span class="meta-sep">·</span>
+  <span class="meta-hint">Draft Review 2026 — visual only, no live data</span>
+</div>
+
+<div class="viewport-wrap">
+<div class="app-frame">
+
+  <div class="page-header">
+    <div class="page-title">📝 Draft Review 2026</div>
+    <div class="page-sub">Grade every team's draft. Compare to consensus, NFL slot, and team needs.</div>
+  </div>
+
+  <!-- REVIEW TABS -->
+  <div class="review-tabs">
+    <div class="review-tab active">
+      🤖 NMLBot
+      <span class="badge">OFFICIAL</span>
+    </div>
+    <div class="review-tab">📋 Jon's Take</div>
+    <div class="review-tab">📋 Mike's Take</div>
+    <div class="review-tab">📋 Sara's Take</div>
+    <div class="review-tab publish">+ Publish Yours</div>
+  </div>
+
+  <!-- LEAGUE-WIDE RANKING CARD (vertical, 2-column) -->
+  <div class="rank-card">
+    <div class="rank-card-title">League Draft Rankings · 1 to 32</div>
+    <div class="rank-list">
+      <div class="rank-row"><span class="rk-num">1</span><span class="rk-team">Cleveland Browns<span class="rk-team-sub">· Mike T.</span></span><span class="rk-move">—</span><span class="rk-score g5">5</span></div>
+      <div class="rank-row"><span class="rk-num">2</span><span class="rk-team">Baltimore Ravens<span class="rk-team-sub">· Drew P.</span></span><span class="rk-move">—</span><span class="rk-score g5">5</span></div>
+      <div class="rank-row"><span class="rk-num">3</span><span class="rk-team">Philadelphia Eagles<span class="rk-team-sub">· Tony R.</span></span><span class="rk-move">—</span><span class="rk-score g4">4</span></div>
+      <div class="rank-row"><span class="rk-num">4</span><span class="rk-team">San Francisco 49ers<span class="rk-team-sub">· Aaron M.</span></span><span class="rk-move">—</span><span class="rk-score g4">4</span></div>
+      <div class="rank-row"><span class="rk-num">5</span><span class="rk-team">Kansas City Chiefs<span class="rk-team-sub">· Brian L.</span></span><span class="rk-move">—</span><span class="rk-score g4">4</span></div>
+      <div class="rank-row"><span class="rk-num">6</span><span class="rk-team">Detroit Lions<span class="rk-team-sub">· Pat S.</span></span><span class="rk-move">—</span><span class="rk-score g4">4</span></div>
+      <div class="rank-row"><span class="rk-num">7</span><span class="rk-team">Buffalo Bills<span class="rk-team-sub">· Eric F.</span></span><span class="rk-move">—</span><span class="rk-score g4">4</span></div>
+      <div class="rank-row"><span class="rk-num">8</span><span class="rk-team">Miami Dolphins<span class="rk-team-sub">· Greg D.</span></span><span class="rk-move">—</span><span class="rk-score g4">4</span></div>
+      <div class="rank-row"><span class="rk-num">9</span><span class="rk-team">Green Bay Packers<span class="rk-team-sub">· Steve J.</span></span><span class="rk-move">—</span><span class="rk-score g3">3</span></div>
+      <div class="rank-row"><span class="rk-num">10</span><span class="rk-team">Tampa Bay Buccaneers<span class="rk-team-sub">· Jon V.</span></span><span class="rk-move">—</span><span class="rk-score g3">3</span></div>
+      <div class="rank-row"><span class="rk-num">11</span><span class="rk-team">Dallas Cowboys<span class="rk-team-sub">· Marcus W.</span></span><span class="rk-move">—</span><span class="rk-score g3">3</span></div>
+      <div class="rank-row"><span class="rk-num">12</span><span class="rk-team">Cincinnati Bengals<span class="rk-team-sub">· Justin H.</span></span><span class="rk-move">—</span><span class="rk-score g3">3</span></div>
+      <div class="rank-row"><span class="rk-num">13</span><span class="rk-team">New York Jets<span class="rk-team-sub">· Tom B.</span></span><span class="rk-move">—</span><span class="rk-score g3">3</span></div>
+      <div class="rank-row"><span class="rk-num">14</span><span class="rk-team">Seattle Seahawks<span class="rk-team-sub">· Kevin O.</span></span><span class="rk-move">—</span><span class="rk-score g3">3</span></div>
+      <div class="rank-row"><span class="rk-num">15</span><span class="rk-team">LA Chargers<span class="rk-team-sub">· Dave N.</span></span><span class="rk-move">—</span><span class="rk-score g3">3</span></div>
+      <div class="rank-row"><span class="rk-num">16</span><span class="rk-team">Houston Texans<span class="rk-team-sub">· Chris A.</span></span><span class="rk-move">—</span><span class="rk-score g3">3</span></div>
+      <div class="rank-row"><span class="rk-num">17</span><span class="rk-team">Pittsburgh Steelers<span class="rk-team-sub">· Lou C.</span></span><span class="rk-move">—</span><span class="rk-score g3">3</span></div>
+      <div class="rank-row"><span class="rk-num">18</span><span class="rk-team">Jacksonville Jaguars<span class="rk-team-sub">· Hank E.</span></span><span class="rk-move">—</span><span class="rk-score g3">3</span></div>
+      <div class="rank-row"><span class="rk-num">19</span><span class="rk-team">Atlanta Falcons<span class="rk-team-sub">· Will G.</span></span><span class="rk-move">—</span><span class="rk-score g3">3</span></div>
+      <div class="rank-row"><span class="rk-num">20</span><span class="rk-team">Minnesota Vikings<span class="rk-team-sub">· Adam Q.</span></span><span class="rk-move">—</span><span class="rk-score g2">2</span></div>
+      <div class="rank-row"><span class="rk-num">21</span><span class="rk-team">LA Rams<span class="rk-team-sub">· Reggie I.</span></span><span class="rk-move">—</span><span class="rk-score g2">2</span></div>
+      <div class="rank-row"><span class="rk-num">22</span><span class="rk-team">Denver Broncos<span class="rk-team-sub">· Ben Y.</span></span><span class="rk-move">—</span><span class="rk-score g2">2</span></div>
+      <div class="rank-row"><span class="rk-num">23</span><span class="rk-team">Washington Commanders<span class="rk-team-sub">· Sean U.</span></span><span class="rk-move">—</span><span class="rk-score g2">2</span></div>
+      <div class="rank-row"><span class="rk-num">24</span><span class="rk-team">Arizona Cardinals<span class="rk-team-sub">· Joel X.</span></span><span class="rk-move">—</span><span class="rk-score g2">2</span></div>
+      <div class="rank-row"><span class="rk-num">25</span><span class="rk-team">New Orleans Saints<span class="rk-team-sub">· Carl Z.</span></span><span class="rk-move">—</span><span class="rk-score g2">2</span></div>
+      <div class="rank-row"><span class="rk-num">26</span><span class="rk-team">Chicago Bears<span class="rk-team-sub">· Vince P.</span></span><span class="rk-move">—</span><span class="rk-score g2">2</span></div>
+      <div class="rank-row"><span class="rk-num">27</span><span class="rk-team">New England Patriots<span class="rk-team-sub">· Rich K.</span></span><span class="rk-move">—</span><span class="rk-score g2">2</span></div>
+      <div class="rank-row"><span class="rk-num">28</span><span class="rk-team">Tennessee Titans<span class="rk-team-sub">· Hugo R.</span></span><span class="rk-move">—</span><span class="rk-score g2">2</span></div>
+      <div class="rank-row"><span class="rk-num">29</span><span class="rk-team">Carolina Panthers<span class="rk-team-sub">· Owen S.</span></span><span class="rk-move">—</span><span class="rk-score g2">2</span></div>
+      <div class="rank-row"><span class="rk-num">30</span><span class="rk-team">Las Vegas Raiders<span class="rk-team-sub">· Ryan T.</span></span><span class="rk-move">—</span><span class="rk-score g1">1</span></div>
+      <div class="rank-row"><span class="rk-num">31</span><span class="rk-team">New York Giants<span class="rk-team-sub">· Phil U.</span></span><span class="rk-move">—</span><span class="rk-score g1">1</span></div>
+      <div class="rank-row"><span class="rk-num">32</span><span class="rk-team">Indianapolis Colts<span class="rk-team-sub">· Sara K.</span></span><span class="rk-move">—</span><span class="rk-score g1">1</span></div>
+    </div>
+  </div>
+
+  <div class="section-divider">Team-by-Team Breakdown</div>
+
+  <!-- TEAM CARD #1 — A-GRADE EXAMPLE -->
+  <div class="team-card">
+    <div class="team-card-header">
+      <div class="team-logo">CLE</div>
+      <div class="team-info">
+        <div class="team-name">Cleveland Browns</div>
+        <div class="team-meta">7 picks · Owner: Mike T.</div>
+      </div>
+      <div class="team-rank">League Rank · <b>#1</b></div>
+      <div class="final-score g5"><div class="num">5</div><div class="lbl">FINAL</div></div>
+    </div>
+
+    <div class="blurb">Cleveland walked into this draft with a clear plan and executed it without flinching. Mendoza at #14 fills the most important seat on the roster at value the room shouldn't have allowed, and the Carrington pick at OT plugged the league's worst protection unit on day one. The Holloway selection in round three is the kind of swing that separates good drafts from great ones — a top-50 talent at a premium NML position taken 43 picks past where his board ranking suggested. Even with a head-scratcher at TE late, this class moved the franchise forward at every level.</div>
+
+    <div class="subgrades">
+      <div class="subgrade-pill">
+        <span class="lbl">Value</span>
+        <span class="val g5">5</span>
+      </div>
+      <div class="subgrade-pill">
+        <span class="lbl">Need</span>
+        <span class="val g5">5</span>
+      </div>
+      <div class="subgrade-pill">
+        <span class="lbl">Talent</span>
+        <span class="val g4">4</span>
+      </div>
+    </div>
+
+    <div class="callouts">
+      <div class="callout best">
+        <div class="callout-lbl">⭐ Best Pick</div>
+        <div class="callout-text"><b>R3.85 — EDGE Marcus Holloway</b> · NML #42, drafted #85. A 43-slot steal at a premium NML position.</div>
+      </div>
+      <div class="callout worst">
+        <div class="callout-lbl">⚠ Most Questionable</div>
+        <div class="callout-text"><b>R5.155 — TE Riley Ortega</b> · NML #180. Reach for a position they didn't desperately need.</div>
+      </div>
+    </div>
+
+    <div class="picks-section">
+      <button class="picks-toggle" onclick="this.classList.toggle('collapsed');this.parentElement.classList.toggle('collapsed')">
+        <span class="arrow">▼</span> All 7 Picks
+      </button>
+      <div class="picks-table-wrap">
+      <table class="picks-table">
+        <thead>
+          <tr>
+            <th>NML Pick</th>
+            <th>Player</th>
+            <th>Pos</th>
+            <th>NML Rank</th>
+            <th>NFL Rank</th>
+            <th>NFL Slot</th>
+            <th>Value</th>
+            <th>Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="pick-num">R1.14</td>
+            <td class="pick-player">Tyler Mendoza</td>
+            <td><span class="pick-pos">QB</span></td>
+            <td class="ref-num">8</td>
+            <td class="ref-num">12</td>
+            <td class="ref-num">18</td>
+            <td><span class="value-chip steal">Steal +6</span></td>
+            <td><span class="pick-grade g5">5</span></td>
+          </tr>
+          <tr>
+            <td class="pick-num">R2.46</td>
+            <td class="pick-player">Devin Carrington</td>
+            <td><span class="pick-pos">OT</span></td>
+            <td class="ref-num">52</td>
+            <td class="ref-num">39</td>
+            <td class="ref-num">41</td>
+            <td><span class="value-chip steal">Steal +6</span></td>
+            <td><span class="pick-grade g4">4</span></td>
+          </tr>
+          <tr>
+            <td class="pick-num">R3.85</td>
+            <td class="pick-player">Marcus Holloway</td>
+            <td><span class="pick-pos">EDGE</span></td>
+            <td class="ref-num">42</td>
+            <td class="ref-num">68</td>
+            <td class="ref-num">71</td>
+            <td><span class="value-chip steal">Steal +43</span></td>
+            <td><span class="pick-grade g5">5</span></td>
+          </tr>
+          <tr>
+            <td class="pick-num">R4.118</td>
+            <td class="pick-player">Jalen Pierce</td>
+            <td><span class="pick-pos">CB</span></td>
+            <td class="ref-num">125</td>
+            <td class="ref-num">132</td>
+            <td class="ref-num">130</td>
+            <td><span class="value-chip even">Even -7</span></td>
+            <td><span class="pick-grade g4">4</span></td>
+          </tr>
+          <tr>
+            <td class="pick-num">R5.155</td>
+            <td class="pick-player">Riley Ortega</td>
+            <td><span class="pick-pos">TE</span></td>
+            <td class="ref-num">180</td>
+            <td class="ref-num">195</td>
+            <td class="ref-num ref-num dim">UDFA</td>
+            <td><span class="value-chip reach">Reach -25</span></td>
+            <td><span class="pick-grade g2">2</span></td>
+          </tr>
+          <tr>
+            <td class="pick-num">R6.193</td>
+            <td class="pick-player">Andre Sutton</td>
+            <td><span class="pick-pos">WR</span></td>
+            <td class="ref-num">175</td>
+            <td class="ref-num">220</td>
+            <td class="ref-num">208</td>
+            <td><span class="value-chip steal">Steal +18</span></td>
+            <td><span class="pick-grade g4">4</span></td>
+          </tr>
+          <tr>
+            <td class="pick-num">R7.230</td>
+            <td class="pick-player">Cam Whitfield</td>
+            <td><span class="pick-pos">S</span></td>
+            <td class="ref-num">245</td>
+            <td class="ref-num">238</td>
+            <td class="ref-num dim">UDFA</td>
+            <td><span class="value-chip even">Even -15</span></td>
+            <td><span class="pick-grade g3">3</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="ahead-section">
+      <div class="ahead-title">🔭 Looking Ahead</div>
+      <div class="ahead-needs">
+        <span class="need-pill">DT</span>
+        <span class="need-pill">LB</span>
+        <span class="need-pill">FS depth</span>
+      </div>
+      <div class="ahead-tools">
+        <b>Tools to fix it:</b> 2027 picks remaining — R1, R2, R3, R5, R7. Plenty of capital to address remaining holes via FA or next year's draft.
+      </div>
+    </div>
+  </div>
+
+  <!-- TEAM CARD #2 — B-GRADE EXAMPLE -->
+  <div class="team-card">
+    <div class="team-card-header">
+      <div class="team-logo" style="background:linear-gradient(135deg,#facc15,#f97316)">TB</div>
+      <div class="team-info">
+        <div class="team-name">Tampa Bay Buccaneers</div>
+        <div class="team-meta">5 picks · Owner: Jon V.</div>
+      </div>
+      <div class="team-rank">League Rank · <b>#10</b></div>
+      <div class="final-score g3"><div class="num">3</div><div class="lbl">FINAL</div></div>
+    </div>
+
+    <div class="blurb">Tampa's first-round move for Banks at WR is the headline — a top-10 NML-adjusted talent secured at pick 21, and a clean answer to the offense's biggest hole. The trouble started in round two, where the staff reached badly for a developmental DT in a class deep at the position and a league that traditionally undervalues the spot. A steady CB pickup in the third and a high-floor LB on day three softened the damage, but the front office left points on the board by skipping over more impactful talent at need positions. The Edge and OG holes are still wide open heading into the offseason.</div>
+
+    <div class="subgrades">
+      <div class="subgrade-pill">
+        <span class="lbl">Value</span>
+        <span class="val g3">3</span>
+      </div>
+      <div class="subgrade-pill">
+        <span class="lbl">Need</span>
+        <span class="val g4">4</span>
+      </div>
+      <div class="subgrade-pill">
+        <span class="lbl">Talent</span>
+        <span class="val g3">3</span>
+      </div>
+    </div>
+
+    <div class="callouts">
+      <div class="callout best">
+        <div class="callout-lbl">⭐ Best Pick</div>
+        <div class="callout-text"><b>R1.21 — WR Trey Banks</b> · NML #9 in NML-adjusted rankings. Premium NML position, quality value.</div>
+      </div>
+      <div class="callout worst">
+        <div class="callout-lbl">⚠ Most Questionable</div>
+        <div class="callout-text"><b>R2.52 — DT Brock Lassiter</b> · NML #95. Discounted by NML's lower DT value, plus the position wasn't a stated need.</div>
+      </div>
+    </div>
+
+    <div class="picks-section">
+      <button class="picks-toggle" onclick="this.classList.toggle('collapsed');this.parentElement.classList.toggle('collapsed')">
+        <span class="arrow">▼</span> All 5 Picks
+      </button>
+      <div class="picks-table-wrap">
+      <table class="picks-table">
+        <thead>
+          <tr><th>NML Pick</th><th>Player</th><th>Pos</th><th>NML Rank</th><th>NFL Rank</th><th>NFL Slot</th><th>Value</th><th>Grade</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="pick-num">R1.21</td>
+            <td class="pick-player">Trey Banks</td>
+            <td><span class="pick-pos">WR</span></td>
+            <td class="ref-num">9</td>
+            <td class="ref-num">14</td>
+            <td class="ref-num">12</td>
+            <td><span class="value-chip steal">Steal +12</span></td>
+            <td><span class="pick-grade g5">5</span></td>
+          </tr>
+          <tr>
+            <td class="pick-num">R2.52</td>
+            <td class="pick-player">Brock Lassiter</td>
+            <td><span class="pick-pos">DT</span></td>
+            <td class="ref-num">95</td>
+            <td class="ref-num">48</td>
+            <td class="ref-num">55</td>
+            <td><span class="value-chip reach">Reach -43</span></td>
+            <td><span class="pick-grade g1">1</span></td>
+          </tr>
+          <tr>
+            <td class="pick-num">R3.92</td>
+            <td class="pick-player">Khalil Roberson</td>
+            <td><span class="pick-pos">CB</span></td>
+            <td class="ref-num">88</td>
+            <td class="ref-num">95</td>
+            <td class="ref-num">98</td>
+            <td><span class="value-chip even">Even +4</span></td>
+            <td><span class="pick-grade g4">4</span></td>
+          </tr>
+          <tr>
+            <td class="pick-num">R5.165</td>
+            <td class="pick-player">Mason Beaumont</td>
+            <td><span class="pick-pos">LB</span></td>
+            <td class="ref-num">155</td>
+            <td class="ref-num">168</td>
+            <td class="ref-num">172</td>
+            <td><span class="value-chip even">Even +10</span></td>
+            <td><span class="pick-grade g4">4</span></td>
+          </tr>
+          <tr>
+            <td class="pick-num">R7.245</td>
+            <td class="pick-player">Tre Vaughn</td>
+            <td><span class="pick-pos">RB</span></td>
+            <td class="ref-num">240</td>
+            <td class="ref-num">252</td>
+            <td class="ref-num dim">UDFA</td>
+            <td><span class="value-chip even">Even +5</span></td>
+            <td><span class="pick-grade g3">3</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="ahead-section">
+      <div class="ahead-title">🔭 Looking Ahead</div>
+      <div class="ahead-needs">
+        <span class="need-pill">QB depth</span>
+        <span class="need-pill">OG</span>
+        <span class="need-pill">EDGE</span>
+        <span class="need-pill">S</span>
+      </div>
+      <div class="ahead-tools">
+        <b>Tools to fix it:</b> 2027 picks remaining — R1, R3, R4, R6. Will likely need to address QB and Edge via free agency before next draft.
+      </div>
+    </div>
+  </div>
+
+  <!-- TEAM CARD #3 — D/F-GRADE EXAMPLE -->
+  <div class="team-card">
+    <div class="team-card-header">
+      <div class="team-logo" style="background:linear-gradient(135deg,#dc2626,#7c2d12)">IND</div>
+      <div class="team-info">
+        <div class="team-name">Indianapolis Colts</div>
+        <div class="team-meta">4 picks · Owner: Sara K.</div>
+      </div>
+      <div class="team-rank">League Rank · <b>#32</b></div>
+      <div class="final-score g1"><div class="num">1</div><div class="lbl">FINAL</div></div>
+    </div>
+
+    <div class="blurb">Indianapolis turned a draft loaded with options into a class that fixed almost nothing. The first-round selection of Bowman at OG was a 36-slot reach in NML rankings — and that's after the league's reduced multiplier for interior offensive linemen — and the round-three TE pick compounded the issue at a position not on the team's needs board. The standout problem isn't any single pick, it's the absence of action at corner, where a glaring CB1 need was passed over multiple times in favor of lower-priority spots. Briscoe in round four was the lone bright spot, but he steps into a backfield that already has its starter. This class will need substantial free-agent help to be salvaged.</div>
+
+    <div class="subgrades">
+      <div class="subgrade-pill"><span class="lbl">Value</span><span class="val g1">1</span></div>
+      <div class="subgrade-pill"><span class="lbl">Need</span><span class="val g2">2</span></div>
+      <div class="subgrade-pill"><span class="lbl">Talent</span><span class="val g2">2</span></div>
+    </div>
+
+    <div class="callouts">
+      <div class="callout best">
+        <div class="callout-lbl">⭐ Best Pick</div>
+        <div class="callout-text"><b>R4.130 — RB Jamal Briscoe</b> · NML #145, fair value at the position.</div>
+      </div>
+      <div class="callout worst">
+        <div class="callout-lbl">⚠ Most Questionable</div>
+        <div class="callout-text"><b>R1.18 — IOL Trent Bowman</b> · NML #54. Massive reach at NML's lowest-valued position group.</div>
+      </div>
+    </div>
+
+    <div class="picks-section">
+      <button class="picks-toggle" onclick="this.classList.toggle('collapsed');this.parentElement.classList.toggle('collapsed')">
+        <span class="arrow">▼</span> All 4 Picks
+      </button>
+      <div class="picks-table-wrap">
+      <table class="picks-table">
+        <thead>
+          <tr><th>NML Pick</th><th>Player</th><th>Pos</th><th>NML Rank</th><th>NFL Rank</th><th>NFL Slot</th><th>Value</th><th>Grade</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="pick-num">R1.18</td>
+            <td class="pick-player">Trent Bowman</td>
+            <td><span class="pick-pos">OG</span></td>
+            <td class="ref-num">54</td>
+            <td class="ref-num">22</td>
+            <td class="ref-num">25</td>
+            <td><span class="value-chip reach">Reach -36</span></td>
+            <td><span class="pick-grade g1">1</span></td>
+          </tr>
+          <tr>
+            <td class="pick-num">R3.78</td>
+            <td class="pick-player">Eli Vasquez</td>
+            <td><span class="pick-pos">TE</span></td>
+            <td class="ref-num">110</td>
+            <td class="ref-num">85</td>
+            <td class="ref-num">90</td>
+            <td><span class="value-chip reach">Reach -32</span></td>
+            <td><span class="pick-grade g2">2</span></td>
+          </tr>
+          <tr>
+            <td class="pick-num">R4.130</td>
+            <td class="pick-player">Jamal Briscoe</td>
+            <td><span class="pick-pos">RB</span></td>
+            <td class="ref-num">145</td>
+            <td class="ref-num">138</td>
+            <td class="ref-num">142</td>
+            <td><span class="value-chip even">Even -15</span></td>
+            <td><span class="pick-grade g3">3</span></td>
+          </tr>
+          <tr>
+            <td class="pick-num">R6.205</td>
+            <td class="pick-player">Drew Caldwell</td>
+            <td><span class="pick-pos">DT</span></td>
+            <td class="ref-num">230</td>
+            <td class="ref-num">198</td>
+            <td class="ref-num dim">UDFA</td>
+            <td><span class="value-chip reach">Reach -25</span></td>
+            <td><span class="pick-grade g2">2</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="ahead-section">
+      <div class="ahead-title">🔭 Looking Ahead</div>
+      <div class="ahead-needs">
+        <span class="need-pill">CB1</span>
+        <span class="need-pill">EDGE</span>
+        <span class="need-pill">WR2</span>
+        <span class="need-pill">FS</span>
+        <span class="need-pill">QB depth</span>
+      </div>
+      <div class="ahead-tools">
+        <b>Tools to fix it:</b> 2027 picks remaining — R2, R4, R5. Limited capital. Trade market and FA will need to do the heavy lifting.
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;color:#555;font-size:12px;padding:24px 0;">
+    — 29 more team cards would render here in the full version —
+  </div>
+
+</div>
+</div>
+
+</body>
+</html>

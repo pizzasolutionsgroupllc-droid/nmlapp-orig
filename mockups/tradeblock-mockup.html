@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Trade Block Mockup</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #313338; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 32px; color: #dbdee1; }
+
+  h2 { color: #b5bac1; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px; }
+
+  /* Discord message wrapper */
+  .discord-msg {
+    display: flex;
+    gap: 16px;
+    padding: 4px 16px 4px 16px;
+    max-width: 640px;
+  }
+  .discord-msg:hover { background: #2e3035; border-radius: 4px; }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #5865f2, #7c6aff);
+    flex-shrink: 0; margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .msg-body { flex: 1; min-width: 0; }
+  .msg-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+  .bot-name { font-weight: 600; color: #fff; font-size: 15px; }
+  .bot-tag { background: #5865f2; color: #fff; font-size: 9px; font-weight: 700; padding: 1px 4px; border-radius: 3px; letter-spacing: .5px; vertical-align: middle; }
+  .timestamp { font-size: 11px; color: #87898c; }
+  .msg-text { font-size: 15px; line-height: 1.375; color: #dbdee1; white-space: pre-wrap; }
+
+  /* Discord embed */
+  .embed {
+    margin-top: 6px;
+    border-left: 4px solid #c0392b;
+    background: #2b2d31;
+    border-radius: 4px;
+    padding: 12px 16px 14px;
+    max-width: 520px;
+  }
+  .embed-title {
+    font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px;
+  }
+  .embed-section { margin-bottom: 12px; }
+  .embed-section:last-child { margin-bottom: 0; }
+  .embed-label {
+    font-size: 12px; font-weight: 700; color: #b5bac1;
+    text-transform: uppercase; letter-spacing: .8px; margin-bottom: 4px;
+  }
+  .embed-value { font-size: 14px; color: #dbdee1; line-height: 1.5; }
+  .needs-pill {
+    display: inline-block; background: #383a40;
+    border: 1px solid #4e5058; border-radius: 12px;
+    font-size: 12px; font-weight: 600; color: #dbdee1;
+    padding: 2px 10px; margin: 2px 3px 2px 0;
+  }
+  .divider { border: none; border-top: 1px solid #3f4147; margin: 10px 0; }
+  .asset-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4px 12px; padding: 6px 0;
+    border-bottom: 1px solid #3f4147; font-size: 13px;
+  }
+  .asset-row:last-child { border-bottom: none; }
+  .asset-name { color: #fff; font-weight: 600; }
+  .asset-meta { color: #b5bac1; font-size: 12px; }
+  .asset-want { color: #57f287; }
+  .asset-want-label { color: #87898c; font-size: 11px; }
+  .footer-text { font-size: 11px; color: #87898c; margin-top: 10px; }
+
+  /* App UI mockup */
+  .app-section {
+    margin-top: 48px;
+    background: #0f1117; border-radius: 10px; padding: 24px; max-width: 640px;
+    border: 1px solid #2a2d3e;
+  }
+  .app-section h2 { color: #64748b; margin-bottom: 16px; }
+  .card { background: #1a1d2e; border: 1px solid #2a2d3e; border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
+  .card-header { padding: 10px 14px; border-bottom: 1px solid #2a2d3e; display: flex; align-items: center; justify-content: space-between; }
+  .card-title { font-size: 12px; font-weight: 700; letter-spacing: .5px; color: #e2e8f0; }
+  .card-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  label-sm { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #64748b; display: block; margin-bottom: 4px; }
+  input[type=text], textarea { background: #0f1117; border: 1px solid #2a2d3e; border-radius: 6px; color: #e2e8f0; padding: 7px 10px; font-size: 13px; width: 100%; font-family: inherit; }
+  textarea { resize: vertical; min-height: 60px; }
+  .toggle-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #2a2d3e; }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle { width: 36px; height: 20px; background: #3f4147; border-radius: 10px; position: relative; cursor: pointer; flex-shrink: 0; transition: background .2s; }
+  .toggle.on { background: #7c6aff; }
+  .toggle::after { content:''; position:absolute; width:16px; height:16px; background:#fff; border-radius:50%; top:2px; left:2px; transition: left .2s; }
+  .toggle.on::after { left:18px; }
+  .asset-info { flex: 1; }
+  .asset-info .name { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+  .asset-info .meta { font-size: 11px; color: #64748b; margin-top: 1px; }
+  .want-input { width: 170px; flex-shrink: 0; }
+  .want-input input { font-size: 12px; padding: 4px 8px; }
+  .btn { border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; padding: 7px 14px; }
+  .btn-p { background: #7c6aff; color: #fff; }
+  .btn-s { background: #1e2235; color: #94a3b8; border: 1px solid #2a2d3e; }
+  .posted-badge { font-size: 11px; color: #57f287; font-weight: 600; }
+
+  .two-col { display: flex; gap: 32px; }
+  .two-col > div { flex: 1; }
+  .col-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #64748b; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid #2a2d3e; }
+</style>
+</head>
+<body>
+
+<div class="two-col">
+
+  <!-- LEFT: Discord post preview -->
+  <div>
+    <h2>Discord — #tradeblock channel</h2>
+    <div class="discord-msg">
+      <div class="avatar">🤖</div>
+      <div class="msg-body">
+        <div class="msg-header">
+          <span class="bot-name">NML Bot</span>
+          <span class="bot-tag">BOT</span>
+          <span class="timestamp">Today at 2:14 PM</span>
+        </div>
+        <div class="embed">
+          <div class="embed-title">🏴‍☠️ Las Vegas Raiders — Trade Block</div>
+
+          <div class="embed-section">
+            <div class="embed-label">📝 Team Note</div>
+            <div class="embed-value">Rebuilding around youth. Open to moving veterans for draft capital or young players at positions of need.</div>
+          </div>
+
+          <hr class="divider">
+
+          <div class="embed-section">
+            <div class="embed-label">🎯 Team Needs</div>
+            <div class="embed-value">
+              <span class="needs-pill">QB</span>
+              <span class="needs-pill">OL</span>
+              <span class="needs-pill">CB</span>
+              <span class="needs-pill">EDGE</span>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <div class="embed-section">
+            <div class="embed-label">📤 Available Assets</div>
+            <div class="asset-row">
+              <div>
+                <div class="asset-name">Davante Adams</div>
+                <div class="asset-meta">WR · OVR 94 · Age 31</div>
+              </div>
+              <div>
+                <div class="asset-want-label">Looking for</div>
+                <div class="asset-want">1st round pick or young QB</div>
+              </div>
+            </div>
+            <div class="asset-row">
+              <div>
+                <div class="asset-name">Josh McDaniels</div>
+                <div class="asset-meta">RB · OVR 87 · Age 28</div>
+              </div>
+              <div>
+                <div class="asset-want-label">Looking for</div>
+                <div class="asset-want">OL or mid-round picks</div>
+              </div>
+            </div>
+            <div class="asset-row">
+              <div>
+                <div class="asset-name">2027 1st Round Pick</div>
+                <div class="asset-meta">Orig: Raiders · Rd 1</div>
+              </div>
+              <div>
+                <div class="asset-want-label">Looking for</div>
+                <div class="asset-want">Veteran CB + picks</div>
+              </div>
+            </div>
+            <div class="asset-row">
+              <div>
+                <div class="asset-name">2027 3rd Round Pick</div>
+                <div class="asset-meta">Orig: Cowboys · Rd 3</div>
+              </div>
+              <div>
+                <div class="asset-want-label">Looking for</div>
+                <div class="asset-want">Best offer</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-text">Updated Apr 16 · Las Vegas Raiders</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: App UI mockup -->
+  <div>
+    <h2>App — Raiders Team Page</h2>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">📤 Trade Block</div>
+        <span class="posted-badge">✓ Posted to Discord</span>
+      </div>
+      <div class="card-body">
+
+        <div>
+          <label-sm style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#64748b;display:block;margin-bottom:4px">Team Note</label-sm>
+          <textarea>Rebuilding around youth. Open to moving veterans for draft capital or young players at positions of need.</textarea>
+        </div>
+
+        <div>
+          <label-sm style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#64748b;display:block;margin-bottom:4px">Team Needs</label-sm>
+          <input type="text" value="QB, OL, CB, EDGE">
+        </div>
+
+        <div>
+          <label-sm style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#64748b;display:block;margin-bottom:4px">Assets — Toggle on to add to block</label-sm>
+          <div style="font-size:11px;color:#64748b;margin-bottom:8px;font-style:italic">Players</div>
+
+          <div class="toggle-row">
+            <div class="toggle on"></div>
+            <div class="asset-info">
+              <div class="name">Davante Adams</div>
+              <div class="meta">WR · 94 OVR</div>
+            </div>
+            <div class="want-input"><input type="text" placeholder="Looking for…" value="1st round pick or young QB"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle on"></div>
+            <div class="asset-info">
+              <div class="name">Josh McDaniels</div>
+              <div class="meta">RB · 87 OVR</div>
+            </div>
+            <div class="want-input"><input type="text" placeholder="Looking for…" value="OL or mid-round picks"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle"></div>
+            <div class="asset-info">
+              <div class="name">Aidan O'Connell</div>
+              <div class="meta">QB · 72 OVR</div>
+            </div>
+            <div class="want-input"><input type="text" placeholder="Looking for…" style="opacity:.4"></div>
+          </div>
+
+          <div style="font-size:11px;color:#64748b;margin:10px 0 8px;font-style:italic">Draft Picks</div>
+
+          <div class="toggle-row">
+            <div class="toggle on"></div>
+            <div class="asset-info">
+              <div class="name">2027 1st Round Pick</div>
+              <div class="meta">Orig: Raiders</div>
+            </div>
+            <div class="want-input"><input type="text" placeholder="Looking for…" value="Veteran CB + picks"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle on"></div>
+            <div class="asset-info">
+              <div class="name">2027 3rd Round Pick</div>
+              <div class="meta">Orig: Cowboys</div>
+            </div>
+            <div class="want-input"><input type="text" placeholder="Looking for…" value="Best offer"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle"></div>
+            <div class="asset-info">
+              <div class="name">2027 5th Round Pick</div>
+              <div class="meta">Orig: Raiders</div>
+            </div>
+            <div class="want-input"><input type="text" placeholder="Looking for…" style="opacity:.4"></div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:4px">
+          <button class="btn btn-s">Clear Block</button>
+          <button class="btn btn-p">📤 Post to Discord</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

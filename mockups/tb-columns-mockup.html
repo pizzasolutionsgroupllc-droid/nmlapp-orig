@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Trade Block Column Mockup</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f1117; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 32px; color: #e2e8f0; }
+  h3 { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #64748b; margin-bottom: 10px; }
+  .wrap { margin-bottom: 36px; overflow-x: auto; }
+  table { border-collapse: collapse; font-size: 12px; }
+  th { background: #1a1d2e; padding: 6px 12px; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #64748b; border-bottom: 1px solid #2a2d3e; white-space: nowrap; }
+  td { padding: 7px 12px; border-bottom: 1px solid #1e2235; white-space: nowrap; }
+  .note { color: #94a3b8; font-size: 11px; max-width: 220px; white-space: normal; }
+  .pos { background: #1e3a5f; color: #60a5fa; border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: 700; }
+  .ovr { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 800; color: #4ade80; }
+  .age { color: #94a3b8; }
+  .team { font-weight: 600; }
+  .moved { background: #1a2a1a; }
+  .arrow { color: #7c6aff; font-size: 18px; margin: 0 12px; }
+  .cols-row { display: flex; align-items: center; gap: 0; margin-bottom: 24px; font-size: 12px; }
+  .col-box { background: #1a1d2e; border: 1px solid #2a2d3e; border-radius: 6px; padding: 6px 14px; font-weight: 600; color: #94a3b8; }
+  .col-box.highlight { background: #1a2a3a; border-color: #7c6aff; color: #7c6aff; }
+  .sep { color: #3a3d4e; margin: 0 4px; }
+</style>
+</head>
+<body>
+
+<h3 style="margin-bottom:16px">Before</h3>
+<div class="cols-row">
+  <div class="col-box">NML TEAM</div><div class="sep">→</div>
+  <div class="col-box highlight">NOTE</div><div class="sep">→</div>
+  <div class="col-box">POS</div><div class="sep">→</div>
+  <div class="col-box">NAME</div><div class="sep">→</div>
+  <div class="col-box">OVR</div><div class="sep">→</div>
+  <div class="col-box">AGE</div><div class="sep">→</div>
+  <div class="col-box">…</div>
+</div>
+<div class="wrap">
+<table>
+  <thead><tr>
+    <th>NML TEAM</th><th>NOTE</th><th>POS</th><th>NAME</th><th>OVR</th><th>AGE</th><th>…</th>
+  </tr></thead>
+  <tbody>
+    <tr><td class="team">Raiders</td><td class="note">Looking for a 1st round pick</td><td><span class="pos">HB</span></td><td>Isaac Guerendo</td><td><span class="ovr">73</span></td><td class="age">25</td><td class="age">…</td></tr>
+    <tr><td class="team">Raiders</td><td class="note">Need OL in return</td><td><span class="pos">WR</span></td><td>Davante Adams</td><td><span class="ovr">94</span></td><td class="age">31</td><td class="age">…</td></tr>
+    <tr><td class="team">Bears</td><td class="note">—</td><td><span class="pos">QB</span></td><td>Justin Fields</td><td><span class="ovr">81</span></td><td class="age">25</td><td class="age">…</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 style="margin-bottom:16px">After</h3>
+<div class="cols-row">
+  <div class="col-box">NML TEAM</div><div class="sep">→</div>
+  <div class="col-box">POS</div><div class="sep">→</div>
+  <div class="col-box">NAME</div><div class="sep">→</div>
+  <div class="col-box highlight">NOTE</div><div class="sep">→</div>
+  <div class="col-box">OVR</div><div class="sep">→</div>
+  <div class="col-box">AGE</div><div class="sep">→</div>
+  <div class="col-box">…</div>
+</div>
+<div class="wrap">
+<table>
+  <thead><tr>
+    <th>NML TEAM</th><th>POS</th><th>NAME</th><th class="moved">NOTE</th><th>OVR</th><th>AGE</th><th>…</th>
+  </tr></thead>
+  <tbody>
+    <tr><td class="team">Raiders</td><td><span class="pos">HB</span></td><td>Isaac Guerendo</td><td class="note moved">Looking for a 1st round pick</td><td><span class="ovr">73</span></td><td class="age">25</td><td class="age">…</td></tr>
+    <tr><td class="team">Raiders</td><td><span class="pos">WR</span></td><td>Davante Adams</td><td class="note moved">Need OL in return</td><td><span class="ovr">94</span></td><td class="age">31</td><td class="age">…</td></tr>
+    <tr><td class="team">Bears</td><td><span class="pos">QB</span></td><td>Justin Fields</td><td class="note moved">—</td><td><span class="ovr">81</span></td><td class="age">25</td><td class="age">…</td></tr>
+  </tbody>
+</table>
+</div>
+
+</body>
+</html>

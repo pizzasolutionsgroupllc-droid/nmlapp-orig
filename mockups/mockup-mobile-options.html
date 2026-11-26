@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NML Mobile UX Mockups</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0a0c10; color: #e8eaf0; min-height: 100vh; padding: 24px 16px; }
+
+  h1 { font-size: 22px; font-weight: 800; color: #00d4ff; margin-bottom: 4px; letter-spacing: 1px; }
+  .subtitle { font-size: 13px; color: #adb4c4; margin-bottom: 28px; }
+
+  /* Section headers */
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: #adb4c4; margin: 32px 0 12px; border-bottom: 1px solid #2a2e38; padding-bottom: 8px;
+  }
+  .section-desc { font-size: 13px; color: #d0d4e0; margin-bottom: 20px; line-height: 1.6; }
+
+  /* Option selector tabs */
+  .opt-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .opt-tab {
+    padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600;
+    border: 1px solid #2a2e38; background: #111318; color: #adb4c4; cursor: pointer;
+    transition: all .2s;
+  }
+  .opt-tab.active { background: #00d4ff; color: #0a0c10; border-color: #00d4ff; }
+  .opt-tab:hover:not(.active) { border-color: #00d4ff; color: #00d4ff; }
+
+  /* Industry note */
+  .industry-note {
+    background: #111318; border: 1px solid #2a2e38; border-left: 3px solid #00d4ff;
+    border-radius: 8px; padding: 14px 16px; margin-bottom: 20px; font-size: 13px;
+    color: #d0d4e0; line-height: 1.6;
+  }
+  .industry-note strong { color: #00d4ff; }
+  .pro { color: #00cc88; font-weight: 600; }
+  .con { color: #ff6b35; font-weight: 600; }
+
+  /* Phone frame */
+  .phones-row { display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
+  .phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .phone-label { font-size: 12px; font-weight: 700; color: #adb4c4; letter-spacing: 1px; text-transform: uppercase; }
+  .phone {
+    width: 320px; height: 620px; background: #111318; border-radius: 36px;
+    border: 3px solid #333; overflow: hidden; position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6), inset 0 0 0 1px #444;
+    display: flex; flex-direction: column;
+  }
+  .phone-notch {
+    height: 28px; background: #0a0c10; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+  }
+  .phone-notch-pill { width: 80px; height: 14px; background: #333; border-radius: 10px; }
+  .phone-screen { flex: 1; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+
+  /* ===== NML App shell ===== */
+  .app-topbar {
+    height: 44px; background: #0a0c10; border-bottom: 1px solid #2a2e38;
+    display: flex; align-items: center; padding: 0 12px; gap: 10px; flex-shrink: 0; z-index: 10;
+  }
+  .app-topbar .menu-btn {
+    width: 32px; height: 32px; border-radius: 6px; background: #1a1d24;
+    border: none; color: #e8eaf0; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; font-size: 16px;
+  }
+  .app-topbar .page-title { font-size: 15px; font-weight: 700; color: #e8eaf0; letter-spacing: .5px; flex: 1; }
+  .app-topbar .user-avatar {
+    width: 28px; height: 28px; border-radius: 50%; background: #ff6b35;
+    display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white;
+  }
+
+  .app-content { flex: 1; overflow-y: auto; overflow-x: hidden; }
+
+  /* ===== OPTION A: Card View ===== */
+  .player-card {
+    background: #1a1d24; border: 1px solid #2a2e38; border-radius: 10px;
+    margin: 8px 10px; overflow: hidden; cursor: pointer; transition: border-color .2s;
+  }
+  .player-card:active { border-color: #00d4ff; }
+  .player-card-top {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  }
+  .pc-ovr {
+    width: 38px; height: 38px; border-radius: 8px; background: #22262f;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 800; color: #00d4ff; flex-shrink: 0;
+  }
+  .pc-ovr.elite { color: #ffd700; }
+  .pc-ovr.good { color: #00cc88; }
+  .pc-info { flex: 1; min-width: 0; }
+  .pc-name { font-size: 13px; font-weight: 700; color: #e8eaf0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pc-meta { font-size: 11px; color: #adb4c4; margin-top: 2px; }
+  .pc-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .pc-pos {
+    font-size: 10px; font-weight: 700; background: rgba(0,212,255,.15);
+    color: #00d4ff; padding: 2px 6px; border-radius: 4px; letter-spacing: .5px;
+  }
+  .pc-trade { font-size: 10px; color: #ff6b35; font-weight: 600; }
+  .pc-expand {
+    display: flex; gap: 6px; padding: 0 12px 10px; flex-wrap: wrap;
+  }
+  .pc-stat { background: #22262f; border-radius: 6px; padding: 5px 8px; text-align: center; min-width: 44px; }
+  .pc-stat-val { font-size: 13px; font-weight: 700; color: #e8eaf0; }
+  .pc-stat-lbl { font-size: 9px; color: #adb4c4; text-transform: uppercase; letter-spacing: .5px; margin-top: 1px; }
+  .pc-actions { display: flex; gap: 6px; padding: 0 12px 10px; }
+  .pc-btn {
+    flex: 1; padding: 7px; border-radius: 6px; font-size: 11px; font-weight: 600;
+    border: none; cursor: pointer; text-align: center;
+  }
+  .pc-btn.primary { background: #00d4ff; color: #0a0c10; }
+  .pc-btn.secondary { background: #22262f; color: #e8eaf0; border: 1px solid #2a2e38; }
+  .pc-expanded { display: none; border-top: 1px solid #2a2e38; }
+  .pc-expanded.open { display: block; }
+
+  .search-bar-mini {
+    display: flex; gap: 8px; padding: 10px; background: #0a0c10; border-bottom: 1px solid #2a2e38;
+  }
+  .search-bar-mini input {
+    flex: 1; background: #1a1d24; border: 1px solid #2a2e38; border-radius: 6px;
+    color: #e8eaf0; font-size: 13px; padding: 7px 10px; outline: none;
+  }
+  .search-bar-mini select {
+    background: #1a1d24; border: 1px solid #2a2e38; border-radius: 6px;
+    color: #e8eaf0; font-size: 12px; padding: 7px 8px; outline: none;
+  }
+
+  /* ===== OPTION B: Sticky Table with Column Groups ===== */
+  .col-group-tabs {
+    display: flex; gap: 0; padding: 8px 10px; background: #0a0c10;
+    border-bottom: 1px solid #2a2e38; overflow-x: auto;
+  }
+  .col-group-tabs::-webkit-scrollbar { display: none; }
+  .cgt {
+    padding: 5px 10px; font-size: 11px; font-weight: 700; border-radius: 4px;
+    color: #adb4c4; cursor: pointer; white-space: nowrap; border: 1px solid transparent; margin-right: 4px;
+  }
+  .cgt.active { background: #22262f; color: #00d4ff; border-color: #00d4ff; }
+  .cgt:hover:not(.active) { color: #e8eaf0; }
+
+  .sticky-table-wrap { overflow-x: auto; }
+  .sticky-table-wrap::-webkit-scrollbar { height: 4px; }
+  .sticky-table-wrap::-webkit-scrollbar-track { background: #111318; }
+  .sticky-table-wrap::-webkit-scrollbar-thumb { background: #2a2e38; border-radius: 2px; }
+  .sticky-tbl { border-collapse: collapse; font-size: 11px; width: 100%; }
+  .sticky-tbl th {
+    background: #0a0c10; color: #adb4c4; font-size: 9px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px; padding: 6px 8px;
+    white-space: nowrap; border-bottom: 1px solid #2a2e38; text-align: left;
+  }
+  .sticky-tbl th.pin, .sticky-tbl td.pin {
+    position: sticky; left: 0; background: #0a0c10; z-index: 2;
+    border-right: 1px solid #2a2e38;
+  }
+  .sticky-tbl td.pin { background: #111318; }
+  .sticky-tbl tr:nth-child(even) td { background: #131620; }
+  .sticky-tbl tr:nth-child(even) td.pin { background: #131620; }
+  .sticky-tbl td { padding: 7px 8px; color: #e8eaf0; border-bottom: 1px solid #1a1d24; white-space: nowrap; }
+  .sticky-tbl td.player-name-cell { min-width: 120px; }
+  .scroll-hint {
+    font-size: 10px; color: #adb4c4; text-align: center; padding: 4px;
+    background: #0a0c10; border-top: 1px solid #2a2e38;
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+  }
+
+  /* ===== OPTION C: Hybrid (List + Detail Tap) ===== */
+  .hybrid-list-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    border-bottom: 1px solid #1a1d24; cursor: pointer; background: #111318;
+  }
+  .hybrid-list-item:active { background: #1a1d24; }
+  .hli-ovr {
+    width: 34px; height: 34px; border-radius: 6px; background: #22262f;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; flex-shrink: 0;
+  }
+  .hli-info { flex: 1; min-width: 0; }
+  .hli-name { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hli-meta { font-size: 11px; color: #adb4c4; margin-top: 2px; }
+  .hli-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .hli-pos { font-size: 10px; font-weight: 700; background: rgba(0,212,255,.15); color: #00d4ff; padding: 2px 5px; border-radius: 3px; }
+  .hli-chevron { font-size: 12px; color: #adb4c4; }
+  .hli-stats-preview { display: flex; gap: 8px; margin-top: 3px; }
+  .hli-stat-pill { font-size: 10px; color: #adb4c4; }
+  .hli-stat-pill span { color: #e8eaf0; font-weight: 600; }
+
+  /* Detail slide-in */
+  .detail-panel {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: #111318; transform: translateX(100%);
+    transition: transform .25s ease; z-index: 20; display: flex; flex-direction: column;
+  }
+  .detail-panel.open { transform: translateX(0); }
+  .detail-header {
+    background: #0a0c10; padding: 10px 12px; border-bottom: 1px solid #2a2e38;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .detail-back {
+    font-size: 13px; color: #00d4ff; cursor: pointer; font-weight: 600;
+    padding: 4px 0; display: flex; align-items: center; gap: 4px;
+  }
+  .detail-body { flex: 1; overflow-y: auto; padding: 12px; }
+  .detail-stat-section { margin-bottom: 14px; }
+  .detail-stat-section-title {
+    font-size: 10px; font-weight: 700; color: #adb4c4; text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid #2a2e38;
+  }
+  .detail-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .detail-stat { background: #1a1d24; border-radius: 6px; padding: 6px 4px; text-align: center; }
+  .detail-stat-val { font-size: 14px; font-weight: 800; color: #e8eaf0; }
+  .detail-stat-lbl { font-size: 9px; color: #adb4c4; text-transform: uppercase; margin-top: 2px; }
+
+  /* ===== NAVIGATION: Drawer ===== */
+  .drawer-overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,.6); z-index: 30; opacity: 0;
+    transition: opacity .25s; pointer-events: none;
+  }
+  .drawer-overlay.open { opacity: 1; pointer-events: all; }
+  .drawer {
+    position: absolute; top: 0; bottom: 0; left: 0; width: 220px;
+    background: #0a0c10; border-right: 1px solid #2a2e38; z-index: 31;
+    transform: translateX(-100%); transition: transform .25s ease;
+    display: flex; flex-direction: column; overflow-y: auto;
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-header {
+    padding: 14px 14px 10px; border-bottom: 1px solid #2a2e38; flex-shrink: 0;
+  }
+  .drawer-logo { font-size: 18px; font-weight: 900; color: #00d4ff; letter-spacing: 1px; }
+  .drawer-user { font-size: 11px; color: #adb4c4; margin-top: 2px; }
+  .drawer-section { padding: 10px 14px 4px; font-size: 9px; font-weight: 700; color: #adb4c4; text-transform: uppercase; letter-spacing: 2px; }
+  .drawer-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    font-size: 13px; color: #d0d4e0; cursor: pointer; border-radius: 0;
+    transition: background .15s;
+  }
+  .drawer-item:active, .drawer-item.active { background: rgba(0,212,255,.1); color: #00d4ff; }
+  .drawer-item .di-icon { width: 16px; text-align: center; font-size: 14px; }
+
+  /* ===== NAVIGATION: Bottom Bar ===== */
+  .bottom-nav {
+    height: 54px; background: #0a0c10; border-top: 1px solid #2a2e38;
+    display: flex; align-items: stretch; flex-shrink: 0;
+  }
+  .bn-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 3px; cursor: pointer; color: #adb4c4;
+    font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+    transition: color .15s; padding: 6px 0;
+  }
+  .bn-item.active { color: #00d4ff; }
+  .bn-item:active { color: #00d4ff; }
+  .bn-icon { font-size: 18px; line-height: 1; }
+  .bn-more-menu {
+    position: absolute; bottom: 54px; right: 0; left: 0;
+    background: #0a0c10; border-top: 1px solid #2a2e38;
+    display: none; padding: 8px 0;
+  }
+  .bn-more-menu.open { display: block; }
+  .bn-more-item {
+    display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+    font-size: 13px; color: #d0d4e0; cursor: pointer;
+  }
+  .bn-more-item:active { background: rgba(0,212,255,.1); color: #00d4ff; }
+
+  /* Demo content for nav mockups */
+  .demo-content { flex: 1; overflow-y: auto; padding: 12px; }
+  .demo-content .dc-card {
+    background: #1a1d24; border: 1px solid #2a2e38; border-radius: 10px;
+    padding: 14px; margin-bottom: 10px;
+  }
+  .demo-content .dc-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .demo-content .dc-body { font-size: 12px; color: #adb4c4; line-height: 1.5; }
+  .demo-content .dc-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 10px; }
+  .demo-content .dc-stat { background: #22262f; border-radius: 6px; padding: 8px; text-align: center; }
+  .demo-content .dc-stat-val { font-size: 18px; font-weight: 800; color: #00d4ff; }
+  .demo-content .dc-stat-lbl { font-size: 9px; color: #adb4c4; text-transform: uppercase; margin-top: 2px; }
+
+  /* Verdict box */
+  .verdict {
+    background: #0f1a14; border: 1px solid #00cc88; border-radius: 10px;
+    padding: 16px; margin: 12px 0 32px;
+  }
+  .verdict-title { font-size: 13px; font-weight: 800; color: #00cc88; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .verdict p { font-size: 13px; color: #d0d4e0; line-height: 1.6; }
+
+  .opt-panel { display: none; }
+  .opt-panel.active { display: block; }
+  .nav-opt-panel { display: none; }
+  .nav-opt-panel.active { display: block; }
+
+  @media(max-width: 700px) {
+    .phones-row { gap: 20px; }
+    .phone { width: 290px; height: 580px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>NML MOBILE UX MOCKUPS</h1>
+<p class="subtitle">Interactive mockups — tap/click to explore each option. Compare side by side.</p>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: TABLE / DATA VIEW OPTIONS -->
+<!-- ============================================================ -->
+<div class="section-label">Section 1 — Player List &amp; Data Tables</div>
+<div class="section-desc">
+  The current app shows every stat column in a massive table — fine on desktop, impossible on phone.
+  Here are the 3 industry approaches, with real NML data so you can see exactly how each would feel.
+</div>
+
+<div class="opt-tabs">
+  <div class="opt-tab active" onclick="showOpt('A')">Option A — Card View</div>
+  <div class="opt-tab" onclick="showOpt('B')">Option B — Column Groups</div>
+  <div class="opt-tab" onclick="showOpt('C')">Option C — List + Tap Detail</div>
+</div>
+
+<!-- OPTION A -->
+<div class="opt-panel active" id="opt-A">
+  <div class="industry-note">
+    <strong>Option A — Card View</strong><br><br>
+    Each player shows as a card with their key info visible. Tapping a card expands it to show
+    core stats and action buttons. <em>All data is still accessible — just reorganized.</em><br><br>
+    <span class="pro">✓ Used by: ESPN app, NFL Fantasy, most modern sports apps</span><br>
+    <span class="pro">✓ Thumb-friendly, easy to scan, no horizontal scroll</span><br>
+    <span class="con">✗ Can't compare multiple players side-by-side easily</span><br>
+    <span class="con">✗ Seeing 40+ stats requires tapping each player individually</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">All Players — Card View</div>
+      <div class="phone">
+        <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+        <div class="phone-screen">
+          <div class="app-topbar">
+            <div class="menu-btn">☰</div>
+            <div class="page-title">All Players</div>
+            <div class="user-avatar">JT</div>
+          </div>
+          <div class="search-bar-mini">
+            <input type="text" placeholder="Search players..." value="">
+            <select><option>All Pos</option><option>QB</option><option>WR</option></select>
+          </div>
+          <div class="app-content" id="card-view-list">
+
+            <!-- Card 1 - collapsed -->
+            <div class="player-card" onclick="toggleCard('c1')">
+              <div class="player-card-top">
+                <div class="pc-ovr elite">94</div>
+                <div class="pc-info">
+                  <div class="pc-name">Davante Adams</div>
+                  <div class="pc-meta">Las Vegas Raiders • Age 32</div>
+                </div>
+                <div class="pc-right">
+                  <div class="pc-pos">WR</div>
+                </div>
+              </div>
+              <div class="pc-expanded" id="c1">
+                <div class="pc-expand">
+                  <div class="pc-stat"><div class="pc-stat-val">94</div><div class="pc-stat-lbl">OVR</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">88</div><div class="pc-stat-lbl">SPD</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">99</div><div class="pc-stat-lbl">CTH</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">95</div><div class="pc-stat-lbl">RTE</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">92</div><div class="pc-stat-lbl">ACC</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">6'1"</div><div class="pc-stat-lbl">HT</div></div>
+                </div>
+                <div class="pc-actions">
+                  <div class="pc-btn primary">View Full Profile</div>
+                  <div class="pc-btn secondary">Trade Block</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2 - collapsed -->
+            <div class="player-card" onclick="toggleCard('c2')">
+              <div class="player-card-top">
+                <div class="pc-ovr elite">91</div>
+                <div class="pc-info">
+                  <div class="pc-name">Maxx Crosby</div>
+                  <div class="pc-meta">Las Vegas Raiders • Age 27</div>
+                </div>
+                <div class="pc-right">
+                  <div class="pc-pos" style="background:rgba(255,107,53,.15);color:#ff6b35;">DE</div>
+                  <div class="pc-trade">🔁 Trade Block</div>
+                </div>
+              </div>
+              <div class="pc-expanded" id="c2">
+                <div class="pc-expand">
+                  <div class="pc-stat"><div class="pc-stat-val">91</div><div class="pc-stat-lbl">OVR</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">82</div><div class="pc-stat-lbl">SPD</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">94</div><div class="pc-stat-lbl">TCKL</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">91</div><div class="pc-stat-lbl">BLKSH</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">89</div><div class="pc-stat-lbl">PURS</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">6'5"</div><div class="pc-stat-lbl">HT</div></div>
+                </div>
+                <div class="pc-actions">
+                  <div class="pc-btn primary">View Full Profile</div>
+                  <div class="pc-btn secondary">Remove Block</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3 - collapsed -->
+            <div class="player-card" onclick="toggleCard('c3')">
+              <div class="player-card-top">
+                <div class="pc-ovr good">84</div>
+                <div class="pc-info">
+                  <div class="pc-name">Josh Jacobs</div>
+                  <div class="pc-meta">Green Bay Packers • Age 26</div>
+                </div>
+                <div class="pc-right">
+                  <div class="pc-pos" style="background:rgba(0,204,136,.15);color:#00cc88;">HB</div>
+                </div>
+              </div>
+              <div class="pc-expanded" id="c3">
+                <div class="pc-expand">
+                  <div class="pc-stat"><div class="pc-stat-val">84</div><div class="pc-stat-lbl">OVR</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">91</div><div class="pc-stat-lbl">SPD</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">88</div><div class="pc-stat-lbl">CARRY</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">82</div><div class="pc-stat-lbl">BRK</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">86</div><div class="pc-stat-lbl">TRUCK</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">5'10"</div><div class="pc-stat-lbl">HT</div></div>
+                </div>
+                <div class="pc-actions">
+                  <div class="pc-btn primary">View Full Profile</div>
+                  <div class="pc-btn secondary">Trade Block</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4 - collapsed -->
+            <div class="player-card" onclick="toggleCard('c4')">
+              <div class="player-card-top">
+                <div class="pc-ovr good">82</div>
+                <div class="pc-info">
+                  <div class="pc-name">Derek Carr</div>
+                  <div class="pc-meta">New Orleans Saints • Age 33</div>
+                </div>
+                <div class="pc-right">
+                  <div class="pc-pos" style="background:rgba(255,215,0,.15);color:#ffd700;">QB</div>
+                </div>
+              </div>
+              <div class="pc-expanded" id="c4">
+                <div class="pc-expand">
+                  <div class="pc-stat"><div class="pc-stat-val">82</div><div class="pc-stat-lbl">OVR</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">77</div><div class="pc-stat-lbl">SPD</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">86</div><div class="pc-stat-lbl">THP</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">84</div><div class="pc-stat-lbl">TASH</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">81</div><div class="pc-stat-lbl">AWR</div></div>
+                  <div class="pc-stat"><div class="pc-stat-val">6'3"</div><div class="pc-stat-lbl">HT</div></div>
+                </div>
+                <div class="pc-actions">
+                  <div class="pc-btn primary">View Full Profile</div>
+                  <div class="pc-btn secondary">Trade Block</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPTION B -->
+<div class="opt-panel" id="opt-B">
+  <div class="industry-note">
+    <strong>Option B — Column Groups (Category Toggle)</strong><br><br>
+    The table stays a table, but stat columns are grouped into categories (Core, Speed, Receiving, etc.).
+    Tap a category button to swap which columns are showing. Name/OVR/POS always stay pinned on the left.<br><br>
+    <span class="pro">✓ Used by: Pro Football Reference, 2K Sports, many fantasy tools</span><br>
+    <span class="pro">✓ Lets users compare multiple players at once</span><br>
+    <span class="pro">✓ Power users love it — all data available, just organized</span><br>
+    <span class="con">✗ Still requires horizontal attention on small phones</span><br>
+    <span class="con">✗ Slightly more cognitive load to learn the groups</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">All Players — Column Groups</div>
+      <div class="phone">
+        <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+        <div class="phone-screen">
+          <div class="app-topbar">
+            <div class="menu-btn">☰</div>
+            <div class="page-title">All Players</div>
+            <div class="user-avatar">JT</div>
+          </div>
+          <div class="search-bar-mini">
+            <input type="text" placeholder="Search..." value="">
+            <select><option>All</option><option>QB</option><option>WR</option></select>
+          </div>
+          <div class="col-group-tabs" id="cgt-row">
+            <div class="cgt active" onclick="switchGroup('core')">Core</div>
+            <div class="cgt" onclick="switchGroup('speed')">Speed</div>
+            <div class="cgt" onclick="switchGroup('recv')">Receiving</div>
+            <div class="cgt" onclick="switchGroup('rush')">Rushing</div>
+            <div class="cgt" onclick="switchGroup('def')">Defense</div>
+            <div class="cgt" onclick="switchGroup('qb')">QB</div>
+            <div class="cgt" onclick="switchGroup('contract')">Contract</div>
+          </div>
+          <div class="app-content">
+            <div class="sticky-table-wrap">
+              <table class="sticky-tbl" id="group-table">
+                <thead>
+                  <tr>
+                    <th class="pin" style="min-width:130px;">Player</th>
+                    <!-- core cols -->
+                    <th class="gcol-core">OVR</th>
+                    <th class="gcol-core">POS</th>
+                    <th class="gcol-core">AGE</th>
+                    <th class="gcol-core">TEAM</th>
+                    <!-- speed cols -->
+                    <th class="gcol-speed" style="display:none;">SPD</th>
+                    <th class="gcol-speed" style="display:none;">ACC</th>
+                    <th class="gcol-speed" style="display:none;">AGI</th>
+                    <th class="gcol-speed" style="display:none;">JMP</th>
+                    <!-- recv cols -->
+                    <th class="gcol-recv" style="display:none;">CTH</th>
+                    <th class="gcol-recv" style="display:none;">CIT</th>
+                    <th class="gcol-recv" style="display:none;">SPC</th>
+                    <th class="gcol-recv" style="display:none;">RTE</th>
+                    <th class="gcol-recv" style="display:none;">REL</th>
+                    <!-- rush cols -->
+                    <th class="gcol-rush" style="display:none;">CAR</th>
+                    <th class="gcol-rush" style="display:none;">TRK</th>
+                    <th class="gcol-rush" style="display:none;">BRK</th>
+                    <th class="gcol-rush" style="display:none;">JUK</th>
+                    <th class="gcol-rush" style="display:none;">SPN</th>
+                    <!-- def cols -->
+                    <th class="gcol-def" style="display:none;">TCKL</th>
+                    <th class="gcol-def" style="display:none;">BLKSH</th>
+                    <th class="gcol-def" style="display:none;">PURS</th>
+                    <th class="gcol-def" style="display:none;">MCV</th>
+                    <th class="gcol-def" style="display:none;">ZCV</th>
+                    <!-- qb cols -->
+                    <th class="gcol-qb" style="display:none;">THP</th>
+                    <th class="gcol-qb" style="display:none;">TASH</th>
+                    <th class="gcol-qb" style="display:none;">TUP</th>
+                    <th class="gcol-qb" style="display:none;">AWR</th>
+                    <!-- contract cols -->
+                    <th class="gcol-contract" style="display:none;">SAL</th>
+                    <th class="gcol-contract" style="display:none;">YRS</th>
+                    <th class="gcol-contract" style="display:none;">CAP</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="pin player-name-cell">D. Adams</td>
+                    <td class="gcol-core">94</td><td class="gcol-core"><span style="font-size:10px;background:rgba(0,212,255,.15);color:#00d4ff;padding:1px 5px;border-radius:3px;">WR</span></td><td class="gcol-core">32</td><td class="gcol-core" style="font-size:10px;">Raiders</td>
+                    <td class="gcol-speed" style="display:none;">88</td><td class="gcol-speed" style="display:none;">92</td><td class="gcol-speed" style="display:none;">88</td><td class="gcol-speed" style="display:none;">91</td>
+                    <td class="gcol-recv" style="display:none;">99</td><td class="gcol-recv" style="display:none;">97</td><td class="gcol-recv" style="display:none;">95</td><td class="gcol-recv" style="display:none;">96</td><td class="gcol-recv" style="display:none;">92</td>
+                    <td class="gcol-rush" style="display:none;">55</td><td class="gcol-rush" style="display:none;">48</td><td class="gcol-rush" style="display:none;">52</td><td class="gcol-rush" style="display:none;">61</td><td class="gcol-rush" style="display:none;">50</td>
+                    <td class="gcol-def" style="display:none;">45</td><td class="gcol-def" style="display:none;">40</td><td class="gcol-def" style="display:none;">42</td><td class="gcol-def" style="display:none;">55</td><td class="gcol-def" style="display:none;">52</td>
+                    <td class="gcol-qb" style="display:none;">—</td><td class="gcol-qb" style="display:none;">—</td><td class="gcol-qb" style="display:none;">—</td><td class="gcol-qb" style="display:none;">—</td>
+                    <td class="gcol-contract" style="display:none;">$17.5M</td><td class="gcol-contract" style="display:none;">2</td><td class="gcol-contract" style="display:none;">$21M</td>
+                  </tr>
+                  <tr>
+                    <td class="pin player-name-cell">M. Crosby</td>
+                    <td class="gcol-core">91</td><td class="gcol-core"><span style="font-size:10px;background:rgba(255,107,53,.15);color:#ff6b35;padding:1px 5px;border-radius:3px;">DE</span></td><td class="gcol-core">27</td><td class="gcol-core" style="font-size:10px;">Raiders</td>
+                    <td class="gcol-speed" style="display:none;">82</td><td class="gcol-speed" style="display:none;">88</td><td class="gcol-speed" style="display:none;">85</td><td class="gcol-speed" style="display:none;">74</td>
+                    <td class="gcol-recv" style="display:none;">—</td><td class="gcol-recv" style="display:none;">—</td><td class="gcol-recv" style="display:none;">—</td><td class="gcol-recv" style="display:none;">—</td><td class="gcol-recv" style="display:none;">—</td>
+                    <td class="gcol-rush" style="display:none;">—</td><td class="gcol-rush" style="display:none;">—</td><td class="gcol-rush" style="display:none;">—</td><td class="gcol-rush" style="display:none;">—</td><td class="gcol-rush" style="display:none;">—</td>
+                    <td class="gcol-def" style="display:none;">94</td><td class="gcol-def" style="display:none;">91</td><td class="gcol-def" style="display:none;">89</td><td class="gcol-def" style="display:none;">60</td><td class="gcol-def" style="display:none;">55</td>
+                    <td class="gcol-qb" style="display:none;">—</td><td class="gcol-qb" style="display:none;">—</td><td class="gcol-qb" style="display:none;">—</td><td class="gcol-qb" style="display:none;">—</td>
+                    <td class="gcol-contract" style="display:none;">$19M</td><td class="gcol-contract" style="display:none;">3</td><td class="gcol-contract" style="display:none;">$22M</td>
+                  </tr>
+                  <tr>
+                    <td class="pin player-name-cell">J. Jacobs</td>
+                    <td class="gcol-core">84</td><td class="gcol-core"><span style="font-size:10px;background:rgba(0,204,136,.15);color:#00cc88;padding:1px 5px;border-radius:3px;">HB</span></td><td class="gcol-core">26</td><td class="gcol-core" style="font-size:10px;">Packers</td>
+                    <td class="gcol-speed" style="display:none;">91</td><td class="gcol-speed" style="display:none;">93</td><td class="gcol-speed" style="display:none;">90</td><td class="gcol-speed" style="display:none;">80</td>
+                    <td class="gcol-recv" style="display:none;">78</td><td class="gcol-recv" style="display:none;">74</td><td class="gcol-recv" style="display:none;">70</td><td class="gcol-recv" style="display:none;">72</td><td class="gcol-recv" style="display:none;">75</td>
+                    <td class="gcol-rush" style="display:none;">88</td><td class="gcol-rush" style="display:none;">86</td><td class="gcol-rush" style="display:none;">82</td><td class="gcol-rush" style="display:none;">84</td><td class="gcol-rush" style="display:none;">78</td>
+                    <td class="gcol-def" style="display:none;">55</td><td class="gcol-def" style="display:none;">48</td><td class="gcol-def" style="display:none;">50</td><td class="gcol-def" style="display:none;">42</td><td class="gcol-def" style="display:none;">40</td>
+                    <td class="gcol-qb" style="display:none;">—</td><td class="gcol-qb" style="display:none;">—</td><td class="gcol-qb" style="display:none;">—</td><td class="gcol-qb" style="display:none;">—</td>
+                    <td class="gcol-contract" style="display:none;">$12M</td><td class="gcol-contract" style="display:none;">4</td><td class="gcol-contract" style="display:none;">$14M</td>
+                  </tr>
+                  <tr>
+                    <td class="pin player-name-cell">D. Carr</td>
+                    <td class="gcol-core">82</td><td class="gcol-core"><span style="font-size:10px;background:rgba(255,215,0,.15);color:#ffd700;padding:1px 5px;border-radius:3px;">QB</span></td><td class="gcol-core">33</td><td class="gcol-core" style="font-size:10px;">Saints</td>
+                    <td class="gcol-speed" style="display:none;">77</td><td class="gcol-speed" style="display:none;">79</td><td class="gcol-speed" style="display:none;">75</td><td class="gcol-speed" style="display:none;">70</td>
+                    <td class="gcol-recv" style="display:none;">—</td><td class="gcol-recv" style="display:none;">—</td><td class="gcol-recv" style="display:none;">—</td><td class="gcol-recv" style="display:none;">—</td><td class="gcol-recv" style="display:none;">—</td>
+                    <td class="gcol-rush" style="display:none;">—</td><td class="gcol-rush" style="display:none;">—</td><td class="gcol-rush" style="display:none;">—</td><td class="gcol-rush" style="display:none;">—</td><td class="gcol-rush" style="display:none;">—</td>
+                    <td class="gcol-def" style="display:none;">—</td><td class="gcol-def" style="display:none;">—</td><td class="gcol-def" style="display:none;">—</td><td class="gcol-def" style="display:none;">—</td><td class="gcol-def" style="display:none;">—</td>
+                    <td class="gcol-qb" style="display:none;">86</td><td class="gcol-qb" style="display:none;">84</td><td class="gcol-qb" style="display:none;">80</td><td class="gcol-qb" style="display:none;">81</td>
+                    <td class="gcol-contract" style="display:none;">$35M</td><td class="gcol-contract" style="display:none;">1</td><td class="gcol-contract" style="display:none;">$38M</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="scroll-hint">← swipe to see more stats →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPTION C -->
+<div class="opt-panel" id="opt-C">
+  <div class="industry-note">
+    <strong>Option C — List View + Tap for Full Detail (Hybrid)</strong><br><br>
+    Players show as a compact list on mobile (name, pos, overall, team). Tapping any player slides in
+    a full detail screen with all stats organized by category. This is the "best of both worlds" approach.<br><br>
+    <span class="pro">✓ Used by: Madden Ultimate Team mobile, 2K MyTeam, most sports card apps</span><br>
+    <span class="pro">✓ Fast scanning on the list, full data in the detail view</span><br>
+    <span class="pro">✓ Detail screen can show ALL 140+ attributes organized cleanly</span><br>
+    <span class="con">✗ Can't compare two players side-by-side without switching back and forth</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">All Players — List + Detail</div>
+      <div class="phone">
+        <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+        <div class="phone-screen" id="hybrid-phone">
+          <div class="app-topbar">
+            <div class="menu-btn">☰</div>
+            <div class="page-title">All Players</div>
+            <div class="user-avatar">JT</div>
+          </div>
+          <div class="search-bar-mini">
+            <input type="text" placeholder="Search..." value="">
+            <select><option>All Pos</option><option>QB</option><option>WR</option></select>
+          </div>
+          <div class="app-content">
+            <div class="hybrid-list-item" onclick="openDetail()">
+              <div class="hli-ovr" style="color:#ffd700;">94</div>
+              <div class="hli-info">
+                <div class="hli-name">Davante Adams</div>
+                <div class="hli-meta">Las Vegas Raiders</div>
+                <div class="hli-stats-preview">
+                  <div class="hli-stat-pill">SPD <span>88</span></div>
+                  <div class="hli-stat-pill">CTH <span>99</span></div>
+                  <div class="hli-stat-pill">RTE <span>96</span></div>
+                </div>
+              </div>
+              <div class="hli-right">
+                <div class="hli-pos">WR</div>
+                <div class="hli-chevron">›</div>
+              </div>
+            </div>
+            <div class="hybrid-list-item" onclick="openDetail2()">
+              <div class="hli-ovr" style="color:#00d4ff;">91</div>
+              <div class="hli-info">
+                <div class="hli-name">Maxx Crosby</div>
+                <div class="hli-meta">Las Vegas Raiders</div>
+                <div class="hli-stats-preview">
+                  <div class="hli-stat-pill">SPD <span>82</span></div>
+                  <div class="hli-stat-pill">TCKL <span>94</span></div>
+                  <div class="hli-stat-pill">BLKSH <span>91</span></div>
+                </div>
+              </div>
+              <div class="hli-right">
+                <div class="hli-pos" style="background:rgba(255,107,53,.15);color:#ff6b35;">DE</div>
+                <div class="hli-chevron">›</div>
+              </div>
+            </div>
+            <div class="hybrid-list-item">
+              <div class="hli-ovr" style="color:#00cc88;">84</div>
+              <div class="hli-info">
+                <div class="hli-name">Josh Jacobs</div>
+                <div class="hli-meta">Green Bay Packers</div>
+                <div class="hli-stats-preview">
+                  <div class="hli-stat-pill">SPD <span>91</span></div>
+                  <div class="hli-stat-pill">CAR <span>88</span></div>
+                  <div class="hli-stat-pill">TRK <span>86</span></div>
+                </div>
+              </div>
+              <div class="hli-right">
+                <div class="hli-pos" style="background:rgba(0,204,136,.15);color:#00cc88;">HB</div>
+                <div class="hli-chevron">›</div>
+              </div>
+            </div>
+            <div class="hybrid-list-item">
+              <div class="hli-ovr" style="color:#00cc88;">82</div>
+              <div class="hli-info">
+                <div class="hli-name">Derek Carr</div>
+                <div class="hli-meta">New Orleans Saints</div>
+                <div class="hli-stats-preview">
+                  <div class="hli-stat-pill">THP <span>86</span></div>
+                  <div class="hli-stat-pill">TASH <span>84</span></div>
+                  <div class="hli-stat-pill">AWR <span>81</span></div>
+                </div>
+              </div>
+              <div class="hli-right">
+                <div class="hli-pos" style="background:rgba(255,215,0,.15);color:#ffd700;">QB</div>
+                <div class="hli-chevron">›</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detail panel - slides in -->
+          <div class="detail-panel" id="detail-p1">
+            <div class="detail-header">
+              <div class="detail-back" onclick="closeDetail('detail-p1')">‹ Back</div>
+              <div style="flex:1;font-size:14px;font-weight:700;">Davante Adams</div>
+              <div style="font-size:10px;background:rgba(0,212,255,.15);color:#00d4ff;padding:3px 8px;border-radius:4px;font-weight:700;">WR · 94 OVR</div>
+            </div>
+            <div class="detail-body">
+              <div style="background:#1a1d24;border-radius:8px;padding:10px;margin-bottom:12px;display:flex;gap:12px;align-items:center;">
+                <div style="text-align:center;">
+                  <div style="font-size:32px;font-weight:900;color:#ffd700;">94</div>
+                  <div style="font-size:9px;color:#adb4c4;text-transform:uppercase;letter-spacing:1px;">Overall</div>
+                </div>
+                <div style="flex:1;font-size:11px;color:#adb4c4;line-height:1.8;">
+                  <div><strong style="color:#e8eaf0;">Team:</strong> Las Vegas Raiders</div>
+                  <div><strong style="color:#e8eaf0;">Age:</strong> 32 · <strong style="color:#e8eaf0;">Height:</strong> 6'1"</div>
+                  <div><strong style="color:#e8eaf0;">Contract:</strong> $17.5M · 2 yrs left</div>
+                  <div><strong style="color:#e8eaf0;">Dev Trait:</strong> Superstar X-Factor</div>
+                </div>
+              </div>
+              <div class="detail-stat-section">
+                <div class="detail-stat-section-title">Speed &amp; Athleticism</div>
+                <div class="detail-stats-grid">
+                  <div class="detail-stat"><div class="detail-stat-val">88</div><div class="detail-stat-lbl">Speed</div></div>
+                  <div class="detail-stat"><div class="detail-stat-val">92</div><div class="detail-stat-lbl">Accel</div></div>
+                  <div class="detail-stat"><div class="detail-stat-val">88</div><div class="detail-stat-lbl">Agility</div></div>
+                  <div class="detail-stat"><div class="detail-stat-val">91</div><div class="detail-stat-lbl">Jump</div></div>
+                </div>
+              </div>
+              <div class="detail-stat-section">
+                <div class="detail-stat-section-title">Receiving</div>
+                <div class="detail-stats-grid">
+                  <div class="detail-stat"><div class="detail-stat-val" style="color:#ffd700;">99</div><div class="detail-stat-lbl">Catch</div></div>
+                  <div class="detail-stat"><div class="detail-stat-val" style="color:#ffd700;">97</div><div class="detail-stat-lbl">CIT</div></div>
+                  <div class="detail-stat"><div class="detail-stat-val">95</div><div class="detail-stat-lbl">Spec</div></div>
+                  <div class="detail-stat"><div class="detail-stat-val" style="color:#ffd700;">96</div><div class="detail-stat-lbl">Route</div></div>
+                  <div class="detail-stat"><div class="detail-stat-val">92</div><div class="detail-stat-lbl">Release</div></div>
+                </div>
+              </div>
+              <div class="detail-stat-section">
+                <div class="detail-stat-section-title">Ball Carrier</div>
+                <div class="detail-stats-grid">
+                  <div class="detail-stat"><div class="detail-stat-val">72</div><div class="detail-stat-lbl">Carry</div></div>
+                  <div class="detail-stat"><div class="detail-stat-val">65</div><div class="detail-stat-lbl">Truck</div></div>
+                  <div class="detail-stat"><div class="detail-stat-val">61</div><div class="detail-stat-lbl">Juke</div></div>
+                  <div class="detail-stat"><div class="detail-stat-val">58</div><div class="detail-stat-lbl">Spin</div></div>
+                </div>
+              </div>
+              <div class="detail-stat-section">
+                <div class="detail-stat-section-title">Actions</div>
+                <div style="display:flex;gap:8px;">
+                  <div class="pc-btn primary" style="flex:1;padding:10px;text-align:center;border-radius:8px;background:#00d4ff;color:#0a0c10;font-weight:700;font-size:12px;">Add to Trade Block</div>
+                  <div class="pc-btn secondary" style="flex:1;padding:10px;text-align:center;border-radius:8px;background:#22262f;color:#e8eaf0;border:1px solid #2a2e38;font-weight:700;font-size:12px;">Propose Trade</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detail panel 2 -->
+          <div class="detail-panel" id="detail-p2">
+            <div class="detail-header">
+              <div class="detail-back" onclick="closeDetail('detail-p2')">‹ Back</div>
+              <div style="flex:1;font-size:14px;font-weight:700;">Maxx Crosby</div>
+              <div style="font-size:10px;background:rgba(255,107,53,.15);color:#ff6b35;padding:3px 8px;border-radius:4px;font-weight:700;">DE · 91 OVR</div>
+            </div>
+            <div class="detail-body">
+              <div style="background:#1a1d24;border-radius:8px;padding:10px;margin-bottom:12px;display:flex;gap:12px;align-items:center;">
+                <div style="text-align:center;">
+                  <div style="font-size:32px;font-weight:900;color:#00d4ff;">91</div>
+                  <div style="font-size:9px;color:#adb4c4;text-transform:uppercase;letter-spacing:1px;">Overall</div>
+                </div>
+                <div style="flex:1;font-size:11px;color:#adb4c4;line-height:1.8;">
+                  <div><strong style="color:#e8eaf0;">Team:</strong> Las Vegas Raiders</div>
+                  <div><strong style="color:#e8eaf0;">Age:</strong> 27 · <strong style="color:#e8eaf0;">Height:</strong> 6'5"</div>
+                  <div><strong style="color:#e8eaf0;">Contract:</strong> $19M · 3 yrs left</div>
+                  <div><strong style="color:#e8eaf0;">Dev Trait:</strong> Superstar</div>
+                </div>
+              </div>
+              <div class="detail-stat-section">
+                <div class="detail-stat-section-title">Defense</div>
+                <div class="detail-stats-grid">
+                  <div class="detail-stat"><div class="detail-stat-val" style="color:#ffd700;">94</div><div class="detail-stat-lbl">Tackle</div></div>
+                  <div class="detail-stat"><div class="detail-stat-val" style="color:#ffd700;">91</div><div class="detail-stat-lbl">Blk Shed</div></div>
+                  <div class="detail-stat"><div class="detail-stat-val">89</div><div class="detail-stat-lbl">Pursuit</div></div>
+                  <div class="detail-stat"><div class="detail-stat-val">88</div><div class="detail-stat-lbl">Hit Pwr</div></div>
+                </div>
+              </div>
+              <div class="detail-stat-section">
+                <div class="detail-stat-section-title">Actions</div>
+                <div style="display:flex;gap:8px;">
+                  <div class="pc-btn primary" style="flex:1;padding:10px;text-align:center;border-radius:8px;background:#00d4ff;color:#0a0c10;font-weight:700;font-size:12px;">Remove Trade Block</div>
+                  <div class="pc-btn secondary" style="flex:1;padding:10px;text-align:center;border-radius:8px;background:#22262f;color:#e8eaf0;border:1px solid #2a2e38;font-weight:700;font-size:12px;">Propose Trade</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end phone-screen -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: NAVIGATION OPTIONS -->
+<!-- ============================================================ -->
+<div class="section-label">Section 2 — Mobile Navigation</div>
+<div class="section-desc">
+  The current sidebar works great on desktop but on phone it either takes up the full screen
+  or disappears. Here are the two standard approaches used by modern mobile apps.
+</div>
+
+<div class="opt-tabs">
+  <div class="opt-tab active" onclick="showNav('drawer')">Option A — Slide-Out Drawer</div>
+  <div class="opt-tab" onclick="showNav('bottom')">Option B — Bottom Tab Bar</div>
+</div>
+
+<!-- NAV OPTION A: Drawer -->
+<div class="nav-opt-panel active" id="nav-drawer">
+  <div class="industry-note">
+    <strong>Option A — Slide-Out Drawer (Hamburger Menu)</strong><br><br>
+    A ☰ button in the top bar opens a menu that slides in from the left. All navigation items are
+    accessible. Works for any number of menu items.<br><br>
+    <span class="pro">✓ Used by: Gmail, Google Drive, Discord (mobile), most feature-rich apps</span><br>
+    <span class="pro">✓ Supports unlimited nav items — perfect for your 15+ pages</span><br>
+    <span class="pro">✓ Familiar to most phone users</span><br>
+    <span class="con">✗ One extra tap to navigate vs. bottom bar</span><br>
+    <span class="con">✗ Menu is hidden by default — less discoverable for new users</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">Tap ☰ to open menu</div>
+      <div class="phone">
+        <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+        <div class="phone-screen" style="position:relative;">
+          <div class="app-topbar">
+            <div class="menu-btn" onclick="toggleDrawer()">☰</div>
+            <div class="page-title">My Team — Raiders</div>
+            <div class="user-avatar">JT</div>
+          </div>
+          <div class="demo-content">
+            <div class="dc-card">
+              <div class="dc-title">Las Vegas Raiders</div>
+              <div class="dc-body">Jon (trouse6) · Commissioner</div>
+              <div class="dc-stats">
+                <div class="dc-stat"><div class="dc-stat-val">53</div><div class="dc-stat-lbl">Players</div></div>
+                <div class="dc-stat"><div class="dc-stat-val" style="color:#00cc88;">$4.2M</div><div class="dc-stat-lbl">Cap Space</div></div>
+                <div class="dc-stat"><div class="dc-stat-val">6</div><div class="dc-stat-lbl">Picks</div></div>
+              </div>
+            </div>
+            <div class="dc-card">
+              <div class="dc-title">Pending Trade</div>
+              <div class="dc-body" style="color:#ffd700;">⚡ Chiefs offered D. Adams for a 2027 1st — awaiting your response</div>
+            </div>
+          </div>
+
+          <!-- Drawer -->
+          <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
+          <div class="drawer" id="main-drawer">
+            <div class="drawer-header">
+              <div class="drawer-logo">NML</div>
+              <div class="drawer-user">Jon · Raiders · Commissioner</div>
+            </div>
+            <div class="drawer-section">My League</div>
+            <div class="drawer-item active"><span class="di-icon">🏈</span> My Team</div>
+            <div class="drawer-item"><span class="di-icon">🔄</span> Trades</div>
+            <div class="drawer-item"><span class="di-icon">📋</span> Trade Block</div>
+            <div class="drawer-item"><span class="di-icon">🎯</span> Draft Room</div>
+            <div class="drawer-item"><span class="di-icon">📜</span> Draft History</div>
+            <div class="drawer-section">League</div>
+            <div class="drawer-item"><span class="di-icon">🏆</span> All Teams</div>
+            <div class="drawer-item"><span class="di-icon">👥</span> All Players</div>
+            <div class="drawer-item"><span class="di-icon">🆓</span> Free Agents</div>
+            <div class="drawer-item"><span class="di-icon">🎟️</span> Pick Tracker</div>
+            <div class="drawer-item"><span class="di-icon">📊</span> Leaderboard</div>
+            <div class="drawer-section">Admin</div>
+            <div class="drawer-item"><span class="di-icon">⚙️</span> Settings</div>
+            <div class="drawer-item"><span class="di-icon">👤</span> Users</div>
+            <div class="drawer-item"><span class="di-icon">📥</span> Import</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV OPTION B: Bottom Bar -->
+<div class="nav-opt-panel" id="nav-bottom">
+  <div class="industry-note">
+    <strong>Option B — Bottom Tab Bar</strong><br><br>
+    The 4–5 most important pages are pinned to a bar at the bottom of the screen — always visible,
+    one tap away. A "More" button opens a list of the remaining pages.<br><br>
+    <span class="pro">✓ Used by: Twitter/X, Instagram, Twitch, ESPN, Reddit mobile</span><br>
+    <span class="pro">✓ Key pages are always one thumb-tap away — fastest navigation</span><br>
+    <span class="pro">✓ Very discoverable — users see it immediately</span><br>
+    <span class="con">✗ Limited to ~5 items in the bar — admin pages go in "More"</span><br>
+    <span class="con">✗ Takes up 54px of screen height permanently</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">Tap the bottom icons</div>
+      <div class="phone">
+        <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+        <div class="phone-screen" style="position:relative;">
+          <div class="app-topbar">
+            <div class="page-title">My Team — Raiders</div>
+            <div class="user-avatar">JT</div>
+          </div>
+          <div class="demo-content" style="padding-bottom:4px;">
+            <div class="dc-card">
+              <div class="dc-title">Las Vegas Raiders</div>
+              <div class="dc-body">Jon (trouse6) · Commissioner</div>
+              <div class="dc-stats">
+                <div class="dc-stat"><div class="dc-stat-val">53</div><div class="dc-stat-lbl">Players</div></div>
+                <div class="dc-stat"><div class="dc-stat-val" style="color:#00cc88;">$4.2M</div><div class="dc-stat-lbl">Cap Space</div></div>
+                <div class="dc-stat"><div class="dc-stat-val">6</div><div class="dc-stat-lbl">Picks</div></div>
+              </div>
+            </div>
+            <div class="dc-card">
+              <div class="dc-title">Pending Trade</div>
+              <div class="dc-body" style="color:#ffd700;">⚡ Chiefs offered D. Adams for a 2027 1st — awaiting your response</div>
+            </div>
+          </div>
+          <!-- More menu -->
+          <div class="bn-more-menu" id="more-menu">
+            <div class="bn-more-item" onclick="closeMore()"><span style="font-size:16px;">📋</span> Trade Block</div>
+            <div class="bn-more-item" onclick="closeMore()"><span style="font-size:16px;">🎯</span> Draft Room</div>
+            <div class="bn-more-item" onclick="closeMore()"><span style="font-size:16px;">🎟️</span> Pick Tracker</div>
+            <div class="bn-more-item" onclick="closeMore()"><span style="font-size:16px;">📜</span> Draft History</div>
+            <div class="bn-more-item" onclick="closeMore()"><span style="font-size:16px;">📊</span> Leaderboard</div>
+            <div class="bn-more-item" onclick="closeMore()"><span style="font-size:16px;">⚙️</span> Settings</div>
+            <div class="bn-more-item" onclick="closeMore()"><span style="font-size:16px;">📥</span> Import</div>
+          </div>
+          <div class="bottom-nav">
+            <div class="bn-item active"><div class="bn-icon">🏈</div><div>My Team</div></div>
+            <div class="bn-item" onclick="setActive(this)"><div class="bn-icon">🔄</div><div>Trades</div></div>
+            <div class="bn-item" onclick="setActive(this)"><div class="bn-icon">🏆</div><div>Teams</div></div>
+            <div class="bn-item" onclick="setActive(this)"><div class="bn-icon">👥</div><div>Players</div></div>
+            <div class="bn-item" onclick="toggleMore(this)"><div class="bn-icon">···</div><div>More</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- RECOMMENDATION -->
+<!-- ============================================================ -->
+<div class="section-label">My Recommendation</div>
+
+<div class="verdict">
+  <div class="verdict-title">📱 For Tables: Option C (List + Tap Detail) — with Option B available on desktop</div>
+  <p>
+    Option C gives your league members the fastest mobile experience — quick scanning of players with
+    one tap to see everything. Option A (cards) is close but takes more screen space per player.
+    Option B (column groups) is excellent for power users but can feel complex on a small phone.
+    <br><br>
+    <strong style="color:#00cc88;">Best approach:</strong> Use Option C on mobile automatically, and keep the full table view on desktop.
+    This is exactly how the ESPN app, NFL app, and most fantasy tools handle it — same data, different presentation per device.
+  </p>
+</div>
+
+<div class="verdict" style="border-color:#00d4ff;background:#0f1520;">
+  <div class="verdict-title" style="color:#00d4ff;">📍 For Navigation: Option A (Slide-Out Drawer)</div>
+  <p>
+    Your app has 15+ pages including admin tools. A bottom bar only fits 4–5 items comfortably,
+    meaning most of your pages would live in a "More" menu anyway — defeating the purpose.
+    The drawer handles unlimited items cleanly, and Discord itself uses this exact pattern on mobile,
+    which your users are already familiar with.
+    <br><br>
+    <strong style="color:#00d4ff;">Best approach:</strong> Slide-out drawer on mobile, existing sidebar on desktop. One hamburger button replaces the sidebar on small screens.
+  </p>
+</div>
+
+<script>
+  function showOpt(o) {
+    document.querySelectorAll('.opt-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.opt-tabs .opt-tab').forEach((t,i) => {
+      t.classList.toggle('active', ['A','B','C'][i] === o);
+    });
+    document.getElementById('opt-' + o).classList.add('active');
+  }
+
+  function showNav(n) {
+    document.querySelectorAll('.nav-opt-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.opt-tabs')[1].querySelectorAll('.opt-tab').forEach((t,i) => {
+      t.classList.toggle('active', ['drawer','bottom'][i] === n);
+    });
+    document.getElementById('nav-' + n).classList.add('active');
+  }
+
+  function toggleCard(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('open');
+  }
+
+  function switchGroup(group) {
+    const allGroups = ['core','speed','recv','rush','def','qb','contract'];
+    allGroups.forEach(g => {
+      document.querySelectorAll('.gcol-' + g).forEach(el => {
+        el.style.display = (g === group) ? '' : 'none';
+      });
+    });
+    document.querySelectorAll('.cgt').forEach(t => {
+      t.classList.toggle('active', t.textContent.toLowerCase() === group ||
+        (group === 'core' && t.textContent === 'Core') ||
+        (group === 'recv' && t.textContent === 'Receiving') ||
+        (group === 'rush' && t.textContent === 'Rushing') ||
+        (group === 'def' && t.textContent === 'Defense') ||
+        (group === 'contract' && t.textContent === 'Contract') ||
+        (group === 'speed' && t.textContent === 'Speed') ||
+        (group === 'qb' && t.textContent === 'QB')
+      );
+    });
+  }
+
+  function openDetail() { document.getElementById('detail-p1').classList.add('open'); }
+  function openDetail2() { document.getElementById('detail-p2').classList.add('open'); }
+  function closeDetail(id) { document.getElementById(id).classList.remove('open'); }
+
+  function toggleDrawer() {
+    document.getElementById('main-drawer').classList.toggle('open');
+    document.getElementById('drawer-overlay').classList.toggle('open');
+  }
+
+  function setActive(el) {
+    document.querySelectorAll('.bn-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('more-menu').classList.remove('open');
+  }
+  function toggleMore(el) {
+    document.querySelectorAll('.bn-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('more-menu').classList.toggle('open');
+  }
+  function closeMore() {
+    document.getElementById('more-menu').classList.remove('open');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Vega Ioane",
+    "position": "OG",
+    "school": "Penn State",
+    "thorn_ol_score": 10.0
+  },
+  {
+    "name": "Keylan Rutledge",
+    "position": "OG",
+    "school": "Georgia Tech",
+    "thorn_ol_score": 8.0
+  },
+  {
+    "name": "Blake Miller",
+    "position": "OT",
+    "school": "Clemson",
+    "thorn_ol_score": 7.5
+  },
+  {
+    "name": "Markel Bell",
+    "position": "OT",
+    "school": "Miami",
+    "thorn_ol_score": 6.0
+  },
+  {
+    "name": "Sam Hecht",
+    "position": "C",
+    "school": "Kansas State",
+    "thorn_ol_score": 5.5
+  },
+  {
+    "name": "Travis Burke",
+    "position": "OT",
+    "school": "Memphis",
+    "thorn_ol_score": 5.0
+  },
+  {
+    "name": "Jalen Farmer",
+    "position": "OG",
+    "school": "Kentucky",
+    "thorn_ol_score": 4.5
+  },
+  {
+    "name": "Febechi Nwaiwu",
+    "position": "IOL",
+    "school": "Oklahoma",
+    "thorn_ol_score": 4.0
+  },
+  {
+    "name": "Anez Cooper",
+    "position": "OG",
+    "school": "Miami",
+    "thorn_ol_score": 3.5
+  },
+  {
+    "name": "Matt Gulbin",
+    "position": "C",
+    "school": "Michigan State",
+    "thorn_ol_score": 3.0
+  }
+]
